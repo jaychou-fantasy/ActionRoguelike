@@ -11,8 +11,8 @@ int32 ASPlayerState::GetCredits() const
 void ASPlayerState::AddCredits(int32 Delta)
 {
 	//Avoid plus nagative delta
-	//0 means unnecessary
-	if (!ensure(Delta > 0.0f))
+	//0 means unnecessary(but sometimes)
+	if (!ensure(Delta >= 0.0f))
 	{
 		return;
 	}
@@ -24,7 +24,7 @@ void ASPlayerState::AddCredits(int32 Delta)
 bool ASPlayerState::RemoveCredits(int32 Delta)
 {
 	//Avoid subtract nagative delta
-	if (!ensure(Delta > 0.0f))
+	if (!ensure(Delta >= 0.0f))
 	{
 		return false;
 	}

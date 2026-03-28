@@ -35,6 +35,12 @@ public:
 	bool StopActionByName(AActor* Instigator, FName ActionName);
 
 
+
+	//replicate UObject's subobject一定要在他的附着的comp上面设置rep
+	bool ReplicateSubobjects(class UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
+
+
 	USActionComponent();
 
 protected:
@@ -48,7 +54,7 @@ protected:
 	TArray<TSubclassOf<USAction>> DefaultActions;
 
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TArray<USAction*> Actions;
 
 

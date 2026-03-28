@@ -21,6 +21,9 @@ class ACTIONROGUELIKE_API USAction : public UObject
 	
 
 protected:
+	//comp这种绝对会参与到replicate，bp环节的东西一定要uproperty
+	UPROPERTY(Replicated)
+	USActionComponent* ActionComp;
 
 	/* Tags added to owning actor when activated, removed when action stops */
 	UPROPERTY(EditDefaultsOnly, Category = "Tags")
@@ -39,6 +42,7 @@ protected:
 	void OnRep_IsRunning();
 
 public:
+	void Initialize(USActionComponent* NewActionComp);
 
 	UPROPERTY(EditDefaultsOnly,Category = "Action")
 	bool bAutoStart;
@@ -64,4 +68,15 @@ public:
 	FName ActionName;
 
 	UWorld* GetWorld() const override;
+
+	//virtual不用写，当我们开始override的的时候，直接override就行
+	//
+	// 只有Uobject需要写这个，来源于component的不需要（但是是setisreplicatedbydefault）
+	// 
+	//因为这个funct是默认返回false：不允许联网
+	//现在改成true，就是允许联网
+	bool IsSupportedForNetworking() const override
+	{
+		return true;
+	}
 };

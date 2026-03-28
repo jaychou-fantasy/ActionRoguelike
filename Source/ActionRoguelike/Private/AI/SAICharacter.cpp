@@ -38,7 +38,7 @@ ASAICharacter::ASAICharacter()
 void ASAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 }
 
 void ASAICharacter::PostInitializeComponents()
