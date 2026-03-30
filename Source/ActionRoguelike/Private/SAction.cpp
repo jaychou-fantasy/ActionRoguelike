@@ -15,8 +15,8 @@ void USAction::Initialize(USActionComponent* NewActionComp)
 bool USAction::CanStart_Implementation(AActor* Instigator)
 {
 	USActionComponent* Comp = GetOwningComponent();
-	if (IsRunning())//如果正在运行，那么就不能启动，即防止一个action多次同时启动，还没结束就启动下一个了
-		//其实只要把自己的tag加到blockedtags就行了，反正是先运行再加入tag的，不会影响自己的那一次action
+	if (IsRunning()) // If already running, cannot start — prevents the same action from being started multiple times simultaneously before the previous one finishes
+		// Simply add its own tag to BlockedTags; since it's running before the tag is added, it won't affect the current action instance
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Action already running"));
 		return false;
@@ -30,7 +30,8 @@ bool USAction::CanStart_Implementation(AActor* Instigator)
 }
 
 
-//这里是在实现uasaction里最基本的进行和结束的通告内容，至于真正的开始和结束，是在component里面去调用的
+// This implements the basic start and end notifications in UASAction. 
+// The actual start and end logic is called from the component.
 
 void USAction::StartAction_Implementation(AActor* Instigator)
 {
@@ -38,7 +39,7 @@ void USAction::StartAction_Implementation(AActor* Instigator)
 	LogOnScreen(this, FString::Printf(TEXT("Started: %s"), *ActionName.ToString()), FColor::Green);
 
 	USActionComponent* Comp = GetOwningComponent();
-	//都不用检查ensure，因为action就是在actioncomponent的addaction里面newobject出来的，所以肯定是有的
+	// No need to check with Ensure, because the Action is created via NewObject in ActionComponent's AddAction, so it definitely exists
 	Comp->ActiveGameplayTags.AppendTags(GrantsTags);
 
 	RepData.bIsRunning = true;
@@ -50,7 +51,7 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 	//UE_LOG(LogTemp, Log, TEXT("Stopped: %s"), *GetNameSafe(this));
 	LogOnScreen(this, FString::Printf(TEXT("Stopped: %s"), *ActionName.ToString()), FColor::White);
 
-	//ensureAlways(bIsRunning);//因为只有在actioncomp里面确定了isrunning==0了才会启动stopaction，所以直接ensurealways，无需if了（在comp里才if）
+	// ensureAlways(bIsRunning); // Since StopAction is only called when ActionComponent has confirmed IsRunning == false, use ensureAlways directly — no if statement needed (the if is handled in the component)
 
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.RemoveTags(GrantsTags);
@@ -61,11 +62,11 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 
 
 
-//确保getworld函数能够正确的返回一个uworld指针，万一character不存在，那么他的getworld也就失效了，这里就顺带做一个ensure
-//AActor；UActorComponent；UWorldSubsystem这些才天然知道world
+// Ensures GetWorld can properly return a UWorld pointer. If the Character doesn't exist, its GetWorld becomes invalid, so we add an ensure here as a safeguard
+// Only AActor, UActorComponent, and UWorldSubsystem have native awareness of the world
 UWorld* USAction::GetWorld() const
 {
-	// Outer is set "when!" creating action via   NewObject<T>(当时的this就是outer，是ActionComponent类型的)
+	// Outer is set when creating the action via NewObject<T> (the "this" at that time becomes the Outer, which is of type ActionComponent)
 	AActor* Actor = Cast<AActor>(GetOuter());
 	if (Actor)
 	{
@@ -78,12 +79,15 @@ USActionComponent* USAction::GetOwningComponent() const
 {
 	//AActor* Actor = Cast<AActor>(GetOuter());
 	//return Actor->GetComponentByClass(USActionComponent::StaticClass());
-	//*就是getcomponentbyclass是iterate所有Actor的comp来寻找actioncomp，太影响开销了，所以不如直接在action.cpp的uproperty就设置好它对应的actioncomp
+	// Using GetComponentByClass would iterate through all the Actor's components to find ActionComponent, which is too costly.
+	// Instead, we directly store the corresponding ActionComponent in a UProperty within the Action class
 	return ActionComp;
 }
 
-//在client里，如果server start了，那么isrunning变成true，onrep在client run startaction，这样server的player在client里就显示同样的动作了
-//所以要把上面stop的ensurealways给改了：因为client给sever_player执行stop的时候，bisrunning早就replicate为false了
+// On the client: if the server starts an action, IsRunning becomes true, and OnRep triggers StartAction on the client.
+// This way, the server player's action is also displayed on the client.
+// Therefore, we need to modify the ensureAlways check in StopAction above:
+// Because when the client calls StopAction for the server player, bIsRunning has already been replicated as false.
 void USAction::OnRep_RepData()
 {
 	if (RepData.bIsRunning)

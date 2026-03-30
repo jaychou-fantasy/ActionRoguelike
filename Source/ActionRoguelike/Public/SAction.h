@@ -22,23 +22,23 @@ public:
 	UPROPERTY()
 	bool bIsRunning;
 
-	//这样的话。server在进行projectile的动画时，client能“不仅仅显示projectile”，还能显示instigator的动作
-	//因为playanimmonatge是在instigator身上进行的
-	//而之前只replicated了bisrunning，而instigator没传递，所以会有“光看到projectile而没有动作”
+	// This way, when the server plays the projectile animation, the client will display not only the projectile itself, but also the instigator's action.
+	// Because PlayAnimMontage is executed on the instigator.
+	// Previously, only bIsRunning was replicated, but the instigator wasn't passed along, resulting in the projectile being visible without the corresponding action animation.
 	UPROPERTY()
 	AActor* Instigator;
 };
 
 
-//Blueprintable就是表示这个类可以在蓝图里面创建子类，就比如创建一个BTTaskNode的子类，这里的BTTaskNode就是Blueprintable的
-UCLASS(Blueprintable)
+// Blueprintable indicates that this class can have child classes created in Blueprint — for example, creating a subclass of BTTaskNode.
+// In this case, BTTaskNode itself is marked as Blueprintable.UCLASS(Blueprintable)
 class ACTIONROGUELIKE_API USAction : public UObject
 {
 	GENERATED_BODY()
 	
 
 protected:
-	//comp这种绝对会参与到replicate，bp环节的东西一定要uproperty
+	// Components that absolutely need to participate in replication or Blueprint processes must be marked as UPROPERTY
 	UPROPERTY(Replicated)
 	USActionComponent* ActionComp;
 
@@ -54,7 +54,7 @@ protected:
 	UPROPERTY(ReplicatedUsing = "OnRep_RepData")
 	FActionRepData RepData;
 
-	//现在是client的action能传到server，但是server的action改变发生却传不到client
+	// Currently, actions from the client can reach the server, but changes to actions on the server cannot propagate to the client
 	UFUNCTION()
 	void OnRep_RepData();
 
@@ -73,7 +73,7 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "Action")
 	USActionComponent* GetOwningComponent() const;
 
-	//只要是blueprint nativeevent的函数，在c++里面都要有一个默认的实现：也就是_implementation函数
+	// Any function marked as a BlueprintNativeEvent must have a default implementation in C++ — that is, the _Implementation function
 	UFUNCTION(BlueprintNativeEvent,Category = "Action")
 	void StartAction(AActor* Instigator);
 
@@ -86,13 +86,13 @@ public:
 
 	UWorld* GetWorld() const override;
 
-	//virtual不用写，当我们开始override的的时候，直接override就行
+	// Virtual doesn't need to be written — when we start overriding, we can just use the override keyword
 	//
-	// 只有Uobject需要写这个，来源于component的不需要（但是是setisreplicatedbydefault）
+	// Only UObject requires this; components derived from UActorComponent don't need it (but they do use SetIsReplicatedByDefault)
 	// 
-	//因为这个funct是默认返回false：不允许联网
-	//现在改成true，就是允许联网
-	bool IsSupportedForNetworking() const override
+	// This function returns false by default (networking disabled)
+	// Changing it to true enables networking
+		bool IsSupportedForNetworking() const override
 	{
 		return true;
 	}

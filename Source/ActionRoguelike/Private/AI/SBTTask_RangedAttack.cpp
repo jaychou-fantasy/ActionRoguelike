@@ -24,12 +24,12 @@ EBTNodeResult::Type USBTTask_RangedAttack::ExecuteTask(UBehaviorTreeComponent& O
 		{
 			return EBTNodeResult::Failed;
 		}
-		//防止鞭尸whip a corpse
+		//prevent whip a corpse(bian shi)
 		if (!USAttributeComponent::IsActorAlive(MyPawn))
 		{
 			return EBTNodeResult::Failed;
 		}
-		//omit了 get attributecomp  ，用atributecomp来判断isalive()的步骤
+		//// Omitted the step of getting AttributeComp and using it to check IsAlive()
 
 		//--get params--
 		AActor* TargetActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("TargetActor"));
@@ -49,7 +49,7 @@ EBTNodeResult::Type USBTTask_RangedAttack::ExecuteTask(UBehaviorTreeComponent& O
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//chcek if the actor can just move alittle bit to spawn without collision
 		SpawnParams.Instigator = MyPawn;
-		//这会让projectiile不会和AI自身碰撞
+		// This prevents the projectile from colliding with the AI itself
 
 		AActor* NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass,MuzzleLocation, MuzzleRotation, SpawnParams);
 		

@@ -42,7 +42,7 @@ protected:
 	USActionComponent* ActionComp;
 
 
-	//这个timetohit的name关乎material所以不让改
+	// This TimeToHit name is tied to the material, so don't change it
 	UPROPERTY(VisibleAnywhere,Category = "Effects")
 	FName TimeToHitParamName;
 

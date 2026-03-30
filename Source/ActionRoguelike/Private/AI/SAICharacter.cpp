@@ -44,8 +44,8 @@ void ASAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void ASAICharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	//onseepawn是一个动态委托，当感知到一个新的Pawn时会被触发
-	//然后这个委托会调用我们定义的OnPawnSeen函数
+	// OnSeePawn is a dynamic delegate that is triggered when a new Pawn is perceived
+	// This delegate then calls our defined OnPawnSeen function
 	PawnSensingComp->OnSeePawn.AddDynamic(this,&ASAICharacter::OnPawnSeen);
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASAICharacter::OnHealthChanged);
 }
@@ -62,7 +62,7 @@ void ASAICharacter::SetTargetActor(AActor* T_Actor)
 void ASAICharacter::OnPawnSeen(APawn* Pawn)
 {
 	SetTargetActor(Pawn);
-	DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);//true就是string有阴影，更加明显一点
+	DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);// True :adds a shadow to the string, making it more noticeable
 }
 
 
@@ -98,15 +98,15 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 			AAIController* AIC = Cast<AAIController>(GetController());
 			if (AIC)
 			{
-				AIC->GetBrainComponent()->StopLogic("Killed");//braincomp是哎controller的大脑原件，属于是大脑的大脑
+				AIC->GetBrainComponent()->StopLogic("Killed");// BrainComp is the brain component of the AI Controller — essentially the brain of the brain
 			}
 			//ragdoll
 			GetMesh()->SetAllBodiesSimulatePhysics(true);
 			GetMesh()->SetCollisionProfileName("RagDoll");
-			//死了就没碰撞箱了
+			// No collision box when dead
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			GetCharacterMovement()->DisableMovement();
-			//这样ragdoll就会停止抖动，也就是散架后，立马设置无碰撞+停止抖动
+			// This stops the ragdoll from jittering — after falling apart, immediately disable collision and stop jittering
 			//set lifespan
 			SetLifeSpan(3.0f);
 		}

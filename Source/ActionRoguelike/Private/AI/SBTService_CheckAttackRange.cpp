@@ -18,7 +18,7 @@ void USBTService_CheckAttackRange::TickNode(UBehaviorTreeComponent& OwnerComp, u
 
 	// Check distance between ai pawn and target actor
 
-	UBlackboardComponent* BlackBoardComp = OwnerComp.GetBlackboardComponent();   //////OwnerComp有blackboard和aicontroller，其他的都是他们俩下面的
+	UBlackboardComponent* BlackBoardComp = OwnerComp.GetBlackboardComponent();   //////OwnerComp有blackboard和aicontroller，othercomps are with them two
 	///////aicontroller也有blackboardcomponent
 	
 	

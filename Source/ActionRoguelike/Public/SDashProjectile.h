@@ -26,8 +26,7 @@ protected:
 
 
 	// Handle to cancel timer if we already hit something
-	FTimerHandle TimerHandle_DelayedDetonate;
-	//计时器的句柄（TimerHandle），用来控制或查询定时器，比如取消它、检查是否激活等
+	FTimerHandle TimerHandle_DelayedDetonate;// Timer handle — used to control or query a timer, such as canceling it, checking if it's active, etc.
 
 	// Base class using BlueprintNativeEvent, we must override the _Implementation not the Explode()
 	virtual void Explode_Implementation() override;

@@ -48,12 +48,14 @@ protected:
 
 
 
-	//就是血量是replicated，而这个播报只不过是触发一些ui变化这种，所以其实没必要reliable浪费一大堆网络资源
-	//relicated就是会侧重结果。100-80-60-40可能只会显示100-40，但是multicate则是注重每一次的变化。更突出连续的变化
-	//还有就是unreliable：：在两个人物相距100km的时候，游戏可能不会把这两个东西视为relevant，但是一旦接近。才会触发同步，这就是unreliable
-	//Net Relevancy / Net Cull Distance：：：Actor 远了就不再同步
-	//当申明为unreliable，才会考虑relevancy（存疑）
-	//如果是reliable，就会忽略relevancy（存疑）
+	// Health is replicated, but the broadcast is only for triggering UI changes, etc., so it doesn't need to be reliable — that would waste a lot of network resources
+	// Replication focuses on the end result. Values like 100 → 80 → 60 → 40 might only show 100 → 40, 
+	// whereas Multicast emphasizes every change, highlighting continuous transitions
+	// Additionally, Unreliable: when two characters are 100km apart, the game may not consider them relevant. 
+	// Synchronization only happens when they get closer — this is what Unreliable does
+	// Net Relevancy / Net Cull Distance: Actors that are far away are no longer replicated
+	// When declared as Unreliable, relevancy is taken into account (this is uncertain)
+	// If it's Reliable, relevancy is ignored (this is also uncertain)
 	UFUNCTION(NetMulticast, Reliable)//@fixme:mark as unreliable once we move the 'state' out of our scharacter
 	void MulticastHealthChanged(AActor* Instigator, float NewHealth, float Delta);
 

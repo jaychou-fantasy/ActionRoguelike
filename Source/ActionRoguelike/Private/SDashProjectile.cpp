@@ -55,8 +55,8 @@ void ASDashProjectile::TeleportInstigator()
 	if (ensure(ActorToTeleport))
 	{
 		// Keep instigator rotation or it may end up jarring
-		// 因为不协调、出乎意料或过于激烈，而产生一种令人震惊、不适或不安的感觉
-		ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(),false,true);//bNOCheck=true就是不检测capsule与地面等重叠，直接传送
+		//jarring:  Creates a shocking, uncomfortable, or unsettling sensation due to being uncoordinated, unexpected, or overly intense
+		ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, true); // bNOCheck = true means it doesn't check for capsule collision with the ground or other overlaps — teleports immediately
 		UE_LOG(LogTemp, Warning, TEXT("TeleportInstigator Called!"));
 
 	}

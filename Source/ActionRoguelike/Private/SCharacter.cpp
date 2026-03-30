@@ -52,14 +52,14 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//Axis是一个连续的输入，一直要检测
+	// Axis is a continuous input that needs to be checked constantly
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoverForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
-	//Action是一个不连续的输入，只在按下和松开的时候触发
+	// Action is a discrete input, only triggered when pressed or released
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimartAttack);
 	PlayerInputComponent->BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::BlackholeAttack);
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ASCharacter::Dash);
@@ -75,7 +75,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 }
 
 FVector ASCharacter::GetPawnViewLocation() const
-//他的重写，看的是最低一层的重写，比如apawn里面可以覆盖aactor，acharacter可以覆盖apawn这样
+// When overriding, it looks at the lowest-level override — for example, APawn can override AActor, and ACharacter can override APawn, and so on
 {
 	return CameraComp->GetComponentLocation();
 }
@@ -128,7 +128,7 @@ void ASCharacter::Dash()
 	//GetWorldTimerManager().SetTimer(TimerHandle_BlackholeAttack, this, &ASCharacter::Dash_TimeElapsed, AttackAnimDelay);
 }
 
-//做成了类似三角洲的状态切换，就是
+//when pressed ,then sprint,released stop sprinting
 void ASCharacter::SprintStart()
 {
 	ActionComp->StartActionByName(this, "Sprint");
@@ -149,8 +149,8 @@ void ASCharacter::PrimaryInteract()
 
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	//受伤特效
-	//和targetdummy的material的用法一样
+	// Damage effect
+	// Uses the same approach as the TargetDummy's material
 	if (Delta < 0.0f)
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitName, GetWorld()->TimeSeconds);

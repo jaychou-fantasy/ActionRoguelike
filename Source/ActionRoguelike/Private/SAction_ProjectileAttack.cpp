@@ -18,14 +18,15 @@ void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
 	if (Character)
 	{
 		Character->PlayAnimMontage(AttackAnim);
-		//闪光附着在 手的meshcomp上
+		// The flash effect is attached to the hand's MeshComponent
 		UGameplayStatics::SpawnEmitterAttached(CastingEffect, Character->GetMesh(), HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 
 		FTimerHandle TimerHandle_AttackDelay;
 		FTimerDelegate Delegate;
 		Delegate.BindUFunction(this, "AttackDelay_Elapsed", Character);
 
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttackDelay, Delegate, AttackAnimDelay, false);//因为正常在character的子类里面，可以直接用gettimermanager，但是在外面需要用getworld
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttackDelay, Delegate, AttackAnimDelay, false);// Normally, inside a Character subclass, you can directly use GetTimerManager, 
+		// but outside of it, you need to use GetWorld
 	}
 }
 
@@ -44,7 +45,7 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//chcek if the actor can just move alittle bit to spawn without collision
 		SpawnParams.Instigator = InstigatorCharacter;
 
-		//这个版本是aim at the direction of the controller,then we edit towards the "crosshair"
+		//this version is : aim at the direction of the controller,then we edit towards the "crosshair"
 
 		//GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);//Spawn Transform Matrix
 
@@ -54,20 +55,20 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 		//Ignore Player;
 		FCollisionQueryParams Params;
 		Params.AddIgnoredActor(InstigatorCharacter);
-		//查询条件（过滤规则）”，主要用来指定在碰撞检测过程中要忽略哪些对象、是否进行复杂碰撞、是否返回物理材质等。
+		// Query conditions (filter rules) — primarily used to specify which objects to ignore during collision detection, whether to use complex collision, whether to return physical materials, etc.
 		/*
-		常见用途：
-			AddIgnoredActor()：忽略某个 Actor，不参与碰撞
-			设置 bTraceComplex 等开关
-			设置调试信息
-			它 不决定参与检测的对象类型，只是告诉引擎“怎么查、忽略谁”
+		Common uses:
+			AddIgnoredActor(): Ignores a specific Actor, excluding it from collision
+			Set bTraceComplex and other toggles
+			Set debug information
+			It does NOT determine which object types participate in the detection — it only tells the engine "how to query and who to ignore"
 		*/
 
 		FCollisionObjectQueryParams ObjParams;
 		ObjParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 		ObjParams.AddObjectTypesToQuery(ECC_WorldStatic);
 		ObjParams.AddObjectTypesToQuery(ECC_Pawn);
-		// 这是 “对象类型过滤器”，用于指定碰撞检测应当对哪些 ObjectType 的物体做检测。
+		// This is the "Object Type Filter," used to specify which ObjectType objects the collision detection should check against.
 
 		FHitResult Hit;
 		FVector TraceStart = InstigatorCharacter->GetPawnViewLocation();
@@ -76,20 +77,21 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 
 		FRotator ProjRotation;
 		//true if we got to a blocking hit (Alternative :SweepingSingleByChannel with ECC_WorldDynamic)
+
 		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjParams, Shape, Params))
 		{
-			//adjust location to end uo at crosshair look-at
-			//如果准心碰到东西了，那么可以直接让projectile 发射到  碰撞点
+			// Adjust location to end up at crosshair look-at
+			// If the crosshair hits something, we can directly spawn the projectile at the impact point
 			TraceEnd = Hit.ImpactPoint;
 			/*
-				把你提供的 XAxis 当作物体局部坐标系的 X 轴（前向）
-				自动计算出一个合理的 Y 轴和 Z 轴（保证是正交基向量）
-				最终生成一个 FRotationMatrix（旋转矩阵）
+				Takes your provided XAxis as the local forward direction of the object
+				Automatically calculates a suitable Y and Z axis (ensures an orthonormal basis)
+				Finally generates an FRotationMatrix (rotation matrix)
 			*/
 		}
-		//fall_back since we failed to find any blocking hit
+		// Fall back since we failed to find any blocking hit
 		ProjRotation = FRotationMatrix::MakeFromX(TraceEnd - HandLocation).Rotator();
-		//只能退而求其次往一个稍微没有这么偏的位置
+		// Settle for a slightly less accurate direction as a fallback(tui er qiu qi ci)
 
 		//begin spawn projectile
 		FTransform SpawnMT = FTransform(ProjRotation, HandLocation);

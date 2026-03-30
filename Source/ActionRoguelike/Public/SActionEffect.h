@@ -15,7 +15,8 @@ class ACTIONROGUELIKE_API USActionEffect : public USAction
 	GENERATED_BODY()
 	
 public:
-	//override的那些function,都不需要写UFUNCTION这种，而且如果是BPNativeEvent的话，直接就override implementation的版本就可以了
+	// Overridden functions don't need UFUNCTION specifiers.
+	// For BlueprintNativeEvent functions, you can directly override the _Implementation version
 	void StartAction_Implementation(AActor* Instigator) override;
 
 	void StopAction_Implementation(AActor* Instigator) override;

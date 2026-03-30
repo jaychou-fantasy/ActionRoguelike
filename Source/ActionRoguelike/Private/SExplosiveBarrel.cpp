@@ -40,7 +40,7 @@ void ASExplosiveBarrel::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnActorHit);
-	//this是ASExplosiveBarrel*  也就是当前桶实例instance的指针
+	//this是ASExplosiveBarrel*  // The pointer to the current bucket instance
 }
 
 void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalInpulse, const FHitResult& Hit)
@@ -57,8 +57,8 @@ void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	
 	FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
 	//that works as well::::FString CombinedString = TEXT("Hit at location: ") + Hit.ImpactPoint.ToString();
-	//Printf 是 UE 中创建动态字符串的常用方法，特别适合需要变量插入的复杂字符串构造。
-	//用Foramt直接替换Printf也一样：：：FString CombinedString = FString::Format(TEXT("Hit at location: {0}"), {Hit.ImpactPoint.ToString()});
+	// Printf is a common method in UE for creating dynamic strings, especially suited for complex string construction that requires variable insertion.
+	// Using Format is equivalent to Printf: FString CombinedString = FString::Format(TEXT("Hit at location: {0}"), {Hit.ImpactPoint.ToString()});
 
 
 

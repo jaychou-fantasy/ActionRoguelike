@@ -12,7 +12,7 @@ ASPowerup_Credits::ASPowerup_Credits()
 void ASPowerup_Credits::Interact_Implementation(APawn* InstigatorPawn)
 {
 	//ensure has player
-	//其实没有必要，只是为了防御，可能网络lag也会导致pawn不存在
+	// Not strictly necessary, just a safeguard — network lag could also cause the Pawn to not exist
 	if (!ensure(InstigatorPawn))
 	{
 		return;

@@ -15,7 +15,7 @@
 ASProjectileBase::ASProjectileBase()
 {
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
-	SphereComp->SetCollisionProfileName("Projectile");  //就是我们再project setting里面设置的projectile类一样的
+	SphereComp->SetCollisionProfileName("Projectile");  // This matches the Projectile profile we set in Project Settings
 	SphereComp->OnComponentHit.AddDynamic(this, &ASProjectileBase::OnActorHit);
 	RootComponent = SphereComp;
 
@@ -27,8 +27,9 @@ ASProjectileBase::ASProjectileBase()
 
 	MoveComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
 	MoveComp->bRotationFollowsVelocity = true;
-	//这个意味着物体的旋转是跟着速度的，由速度决定方向，这样投射物如果是长方形，就不会出现飞行方向和头的朝向不一致的问题了
-	MoveComp->bInitialVelocityInLocalSpace = true; //速度相对自生坐标系 not世界坐标系
+	// This makes the object's rotation follow its velocity — the direction is determined by the velocity vector.
+	// This ensures that if the projectile is non-spherical, its forward direction aligns with its flight path.
+	MoveComp->bInitialVelocityInLocalSpace = true; // Velocity is relative to the object's local coordinate system, not world coordinates
 	MoveComp->ProjectileGravityScale = 0.0f;
 	MoveComp->InitialSpeed = 2000;
 

@@ -57,23 +57,19 @@ float USAttributeComponent::GetHealth() const
 	return Health;
 }
 
-//绑定委托q
-
-
 bool USAttributeComponent::IsAlive() const
 {
 	return Health > 0.0f;
 }
-
 
 bool USAttributeComponent::Kill(AActor* Instigator)
 {
 	return ApplyHealthChange(Instigator, -GetHealthMax());
 }
 
-bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor,float Delta)
+bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
-	//如果开了god mode，就不扣血了
+	// If god mode is enabled, the actor won't take damage
 	if (!GetOwner()->CanBeDamaged() && Delta < 0.0f)
 	{
 		return false;
@@ -85,18 +81,18 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor,float Delta
 		Delta *= DamageMultiplier;
 	}
 
-	//Health += Delta;
+	// Health += Delta;
 	float OldHealth = Health;
-	
-	Health = FMath::Clamp(Health + Delta, 0.0f, HealthMax);//因为加完血，可能超出100，所以我们要计算真正的delta
+
+	Health = FMath::Clamp(Health + Delta, 0.0f, HealthMax); // Clamp health to valid range after adding Delta
 
 	float ActualDelta = Health - OldHealth;
-	
+
 	UE_LOG(LogTemp, Log, TEXT("ApplyHealthChange: Owner=%s NewHealth=%f Delta=%f"), *GetNameSafe(GetOwner()), Health, ActualDelta);
-	
+
 	//***
-	//OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
-	//因为下面那个会在server注册好然后让所有client逗调用
+	// OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
+	// The multicast version below is used so that when registered on the server, it gets called on all clients as well
 	if (ActualDelta != 0)
 	{
 		MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
@@ -104,7 +100,7 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor,float Delta
 	//***
 
 
-	//Died
+	// Died
 	if (ActualDelta < 0.0f && Health <= 0.0f)
 	{
 		ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
@@ -114,8 +110,7 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor,float Delta
 		}
 	}
 	return ActualDelta != 0;
-	//如果真的有变化，那么就是返回 true
-	// 没变化就是false
+	// Returns true if there was an actual change, false otherwise
 }
 
 void USAttributeComponent::MulticastHealthChanged_Implementation(AActor* Instigator, float NewHealth, float Delta)
@@ -131,5 +126,6 @@ void USAttributeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(USAttributeComponent, Health);
 	DOREPLIFETIME(USAttributeComponent, HealthMax);
 
-	//DOREPLIFETIME_CONDITION(USAttributeComponent, HealthMax, COND_InitialOnly);//这个就是只会在初始healthmax的时候同步一次，之后healthmax的变化就不会同步了
+	// DOREPLIFETIME_CONDITION(USAttributeComponent, HealthMax, COND_InitialOnly); 
+	// This replicates HealthMax only once at the initial moment — any subsequent changes to HealthMax will not be replicated
 }

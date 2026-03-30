@@ -20,44 +20,44 @@ ASMagicProjectile::ASMagicProjectile()
 	DamageAmount = 20.0f;
 }
 
-
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//这里otheractor，comp都是被击中的actor和具体被击中的component
-	//这里spawnparams得到的instigator就排上用场了，getinstigaor()就是得到这个
-	//然后如果otheractor(也就是和projectile onoverlap的那个actor) == instigator,那么下面的所有都不执行，也就没有damage和emitter了
+	// Here, OtherActor and OtherComp are the hit actor and the specific component that was hit
+	// The Instigator set in SpawnParams comes into play here — GetInstigator() retrieves it
+	// If OtherActor (the actor overlapping with the projectile) is the same as Instigator, then none of the logic below executes, so no damage and no explosion
 	if (OtherActor && OtherActor != GetInstigator())
 	{
 		//FName Muzzle = "Muzzle_01";
 		//static FGameplayTag Tag = FGameplayTag::RequestGameplayTag("Status.Parrying");
-		//这是请求tag和单纯请求一个变量的区别，后面取药request，然后static就可以让这种请求只发生一次
+		// This is the difference between requesting a tag and simply requesting a variable — later requests use the tag, 
+		// and static ensures this request only happens once
 
 
-		//格挡->速度反向
+		// Parry -> reverse velocity
 		USActionComponent* ActionComp = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
 		if (ActionComp && ActionComp->ActiveGameplayTags.HasTag(ParryTag))
 		{
 			MoveComp->Velocity = -MoveComp->Velocity;
-			
+
 			SetInstigator(Cast<APawn>(OtherActor));
 
 			return;
-			//意思是如果被防反了，那么就不触发爆炸
+			// If parried, don't trigger the explosion
 		}
-		
+
 		//USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(OtherActor);
 		if (USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, DamageAmount, SweepResult))
 		{
 			Explode();
-			//添加给otheractor以burnningaction
+			// Add the burning action to OtherActor
 			if (ActionComp && ensure(BurningActionClass))
 			{
 				ActionComp->AddAction(GetInstigator(), BurningActionClass);
 			}
 		}
 
-		//Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));//"给我这个类的身份证" - 返回一个代表该类的唯一标识
-		//UE 运行时通过这个"身份证"来识别和操作类型
+		//Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); // "Give me the ID card for this class" — returns a unique identifier for the class
+		// UE uses this "ID card" at runtime to identify and manipulate types
 		//if (OtherComp)
 		//{
 			//if (AttributeComp)
@@ -65,14 +65,14 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 				//AttributeComp->ApplyHealthChange(-20.0f);
 				//Destroy();
 
-				//minus in front of DamageAmount to apply the change as damage,not healing
-				          /*AttributeComp->ApplyHealthChange(GetInstigator(), -DamageAmount);*/
-				//这里的attributecomp是otheractor的attributecomp
-				
-				//然后apply healthchange会触发onhealthchange delegate，然后broadcast给所有用adddynamic绑定的的函数，触发扣血啥的
-				          /*UE_LOG(LogTemp, Warning, TEXT("SMagicProjectile: Applying %f damage to %s"), DamageAmount, *GetNameSafe(OtherActor));*/
-				//only explode when we hit something valid
-				          /*Explode();*/
+				// Minus sign in front of DamageAmount to apply the change as damage, not healing
+						  /*AttributeComp->ApplyHealthChange(GetInstigator(), -DamageAmount);*/
+				// Here, AttributeComp is OtherActor's attribute component
+
+				// ApplyHealthChange then triggers the OnHealthChanged delegate, which broadcasts to all functions bound via AddDynamic, triggering health reduction, etc.
+						  /*UE_LOG(LogTemp, Warning, TEXT("SMagicProjectile: Applying %f damage to %s"), DamageAmount, *GetNameSafe(OtherActor));*/
+				// Only explode when we hit something valid
+						  /*Explode();*/
 			//}
 		//}
 	}

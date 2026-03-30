@@ -27,7 +27,7 @@ void USWorldUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 
 		if (ParentSizeBox)
 		{
-			ParentSizeBox->SetRenderTranslation(ScreenPosition);//定位到屏幕坐标
+			ParentSizeBox->SetRenderTranslation(ScreenPosition);// Convert to screen coordinates
 		}
 	}
 }

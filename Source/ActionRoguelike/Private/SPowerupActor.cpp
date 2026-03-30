@@ -12,13 +12,13 @@ ASPowerupActor::ASPowerupActor()
  	
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
 	SphereComp->SetCollisionProfileName("Powerup");
-	//profile：配置
-	//powerup的等级就是我们在editor里面设置的哪个projectile一个等级
+	//profile：pei zhi
+	// The powerup level corresponds to which projectile level we set in the editor
 	RootComponent = SphereComp;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//将spherecomp作为碰撞箱，meshcomp只是可见模型
+	// Use SphereComponent as the collision box, MeshComponent is just the visible model
 	//ues shpere comp  to detect collision,mesh comp is just for visual effect;
 	MeshComp->SetupAttachment(RootComponent);
 
@@ -49,7 +49,7 @@ void ASPowerupActor::SetPowerupState(bool bNewIsActive)
 
 void ASPowerupActor::Interact_Implementation(APawn* InstigatorPawn)
 {
-	//可是我们把这个函数留给子类去实现吧
+	// We'll leave this function for child classes to implement
 	// logic in derived classes...
 }
       

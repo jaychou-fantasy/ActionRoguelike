@@ -21,7 +21,7 @@ static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"),true,TEXT("
 
 ASGameModeBase::ASGameModeBase()
 {
-	//这个PlayerStateClass是gamemode自带的选项，是bp里面那种需要选择“哪个state class填入的”那种
+	// This PlayerStateClass is a built-in option in GameMode — the kind you select in Blueprint by choosing which State Class to assign
 	PlayerStateClass = ASPlayerState::StaticClass();
 
 	SpawnTimerInterval = 2.0f;
@@ -49,7 +49,7 @@ void ASGameModeBase::StartPlay()
 {
 	Super::StartPlay();
 
-	//其实这个spawnbottimeElapsed可以直接写在startplay里面，只是这样清晰一点
+	// Actually, this SpawnBotTimeElapsed could be written directly in StartPlay, but doing it this way is a bit clearer
 	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBot, this, &ASGameModeBase::SpawnBotTimeElapsed, SpawnTimerInterval, true);//true是Bloop
 	
 	SpawnPowerupTimeElapsed();
@@ -57,7 +57,7 @@ void ASGameModeBase::StartPlay()
 
 void ASGameModeBase::SpawnBotTimeElapsed()
 {
-	//console里面设置了0，那么就直接return，不让spawn了
+	// If the console sets it to 0, then just return and don't allow spawning
 	if (!CVarSpawnBots.GetValueOnGameThread())
 	{
 		UE_LOG(LogTemp,Warning,TEXT("Bot spawming disabled via cvar 'CVarSapwnBots'."))
@@ -90,13 +90,13 @@ void ASGameModeBase::SpawnBotTimeElapsed()
 		return;
 	}
 
-	//先检查是否有必要runEQSquery
-	//因为runEQS 很expensive
+	// First, check if it's necessary to run the EQS query
+	// Because running EQS is very expensive
 
-	
-	UEnvQueryInstanceBlueprintWrapper* QueryInstance  = UEnvQueryManager::RunEQSQuery(this, SpawnBotQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr);//最后那个wrapper好像从来不会用到
-	//你可以传入一个已有的 EQS Query Wrapper 来复用它；如果传 nullptr，系统会自动创建一个新的 Query Wrapper
-	//最后得到query得到的结果会通过 Query Wrapper 的 OnQueryFinishedEvent 委托广播出去
+
+	UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, SpawnBotQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr); // The last parameter (wrapper) never seems to be used
+	// You can pass in an existing EQS Query Wrapper to reuse it; if you pass nullptr, the system will automatically create a new Query Wrapper
+	// The result from the query will be broadcast via the Query Wrapper's OnQueryFinishedEvent delegate
 	if (ensure(QueryInstance))
 	{
 		QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ASGameModeBase::OnBotSpawnQueryCompleted);
@@ -116,7 +116,7 @@ void ASGameModeBase::OnBotSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper*
 
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 	UE_LOG(LogTemp, Warning, TEXT("EQS returned %d locations."), Locations.Num());
-	if (Locations.IsValidIndex(0))//.Num() > 0也可以，因为我们只调用这之中一个位置
+	if (Locations.IsValidIndex(0))// .Num() > 0 would also work, since we only need to call one location from the results
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -136,13 +136,13 @@ void ASGameModeBase::SpawnPowerupTimeElapsed()
 	{
 		UE_LOG(LogTemp, Log, TEXT("PowerupClasses count: %d"), PowerupClasses.Num());
 
-		//nullptr就是返回的wrapper class，但是我们需要的是UEnvQueryInstanceBlueprintWrapper，所以直接nullptr不额外添加了
+		// nullptr refers to the returned wrapper class, but what we need is UEnvQueryInstanceBlueprintWrapper, so we'll just use nullptr without adding anything extra
 		UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, PowerupSpawnQuery, this, EEnvQueryRunMode::AllMatching, nullptr);
 		if (ensure(QueryInstance))
 		{
 			UE_LOG(LogTemp, Log, TEXT("EQS Query Started"));
 
-			//就是query完成是一个delegate，然后一旦完成就会传输信息，我们的新funct需要这些，就adddynamic
+			// When the query finishes, it's a delegate — once completed, it transmits information. Our new function needs this data, so we use AddDynamic
 			QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ASGameModeBase::OnPowerupSpawnQueryCompleted);
 		}
 	}
@@ -150,70 +150,70 @@ void ASGameModeBase::SpawnPowerupTimeElapsed()
 
 void ASGameModeBase::OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus)
 {
-	//依旧先检查querystatus(状况情况)，state(状态)
+	// First, check the query status
 	if (QueryStatus != EEnvQueryStatus::Success)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Spawn Power up EQS Query Failed! Status: %d"), (int)QueryStatus);
 		return;
 	}
-	//最重要的一步，提取EQS的结果as array of locations
-	TArray<FVector>Locations = QueryInstance->GetResultsAsLocations();
+	// The most important step: extract EQS results as an array of locations
+	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 	UE_LOG(LogTemp, Warning, TEXT("Locations found: %d"), Locations.Num());
 
-	//keeep used locations to easily check distance between points
-	TArray<FVector>UsedLocations;
-	
-	//在bot spawn里面就是先在time elapse里面判断人数是否少于上限 后，才进行run EQS + on query completed
+	// Keep track of used locations to easily check distance between points
+	TArray<FVector> UsedLocations;
+
+	// In bot spawning: first check if the number of bots is below the limit in the time elapsed function, then run EQS + on query completed
 	int32 SpawnCounter = 0;
 
-	while (SpawnCounter < DesiredPowerupCount && Locations.Num() >0)
+	while (SpawnCounter < DesiredPowerupCount && Locations.Num() > 0)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Entering Spawn Loop"));
-		//pick a random location from remaining points
-		int32 RandomLocationIndex = FMath::RandRange(0, Locations.Num()-1);//因为randrange是包含上界的，5个数的array只包含[0,4]
+		// Pick a random location from the remaining points
+		int32 RandomLocationIndex = FMath::RandRange(0, Locations.Num() - 1); // RandRange is inclusive; a 5-element array contains indices [0,4]
 		FVector PickedLocation = Locations[RandomLocationIndex];
 
-		//Remove to avoid picking again
+		// Remove to avoid picking again
 		Locations.RemoveAt(RandomLocationIndex);
 
-		//check minimum distance requirement,if accepted,then spawn power_up at that picked location
+		// Check minimum distance requirement; if accepted, spawn power-up at the picked location
 		bool bValidLocation = true;
-		//这样就会导致，第一个picked的位置直接生成，因为usedLocation没东西，所以直接跳过forloop
+		// The first picked location will be spawned directly because UsedLocations is empty, so the for loop is skipped
 		for (FVector OtherLocation : UsedLocations)
 		{
-			float DistanceTo = (PickedLocation - OtherLocation).Size();//Size()就是把两个vector3D的差，算成距离大小
+			float DistanceTo = (PickedLocation - OtherLocation).Size(); // Size() calculates the distance between the two 3D vectors
 			if (DistanceTo < RequiredPowerupDistance)
 			{
-				//Show skipped location due to distance
-				//DrawDebugSphere(GetWorld(),PickedLocation,0.0f, 20, FColor::Red, false, 10.0f);
+				// Show skipped location due to distance
+				// DrawDebugSphere(GetWorld(), PickedLocation, 0.0f, 20, FColor::Red, false, 10.0f);
 
-				//too close,skip to next attempt;
+				// Too close, skip to next attempt
 				bValidLocation = false;
 				break;
 			}
 		}
 
-		//Failed the distance test
+		// Failed the distance test
 		if (!bValidLocation)
 		{
 			continue;
-			//直接random到下一个pickedLocation了
+			// Jump directly to the next random picked location
 		}
 
-		//pick a random power_up class
-		int32 RandomClassIndex = FMath::RandRange(0,PowerupClasses.Num()-1);  
+		// Pick a random power-up class
+		int32 RandomClassIndex = FMath::RandRange(0, PowerupClasses.Num() - 1);
 		TSubclassOf<AActor> RandomPowerupClass = PowerupClasses[RandomClassIndex];
 		if (RandomClassIndex)
 		{
 			UE_LOG(LogTemp, Error, TEXT("RandomPowerupClass is NULL"));
 		}
 
-		if(AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(RandomPowerupClass, PickedLocation, FRotator::ZeroRotator))   //后面那个spawnparameter就用默认的了：但是有啥区别？
+		if (AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(RandomPowerupClass, PickedLocation, FRotator::ZeroRotator))   // The SpawnParameter uses default values — what's the difference?
 		{
 			UE_LOG(LogTemp, Log, TEXT("Spawn SUCCESS: %s"), *SpawnedActor->GetName());
 		}
 
-		//keep for distance check
+		// Keep for distance check
 		UsedLocations.Add(PickedLocation);
 		SpawnCounter++;
 	}
@@ -221,47 +221,47 @@ void ASGameModeBase::OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrap
 }
 
 
-//respawn character
+// Respawn character
 void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
 {
 	UE_LOG(LogTemp, Log, TEXT("OnActorKilled: Victim: %s, Killer: %s"), *GetNameSafe(VictimActor), *GetNameSafe(Killer));
-	//*被operator了，就是变成了get FSrting里所有的char了
+	// The * operator dereferences to get all characters in the FString
 
 	ASCharacter* Player = Cast<ASCharacter>(VictimActor);
 	if (Player)
 	{
 		FTimerHandle TimerHandle_RespawnDelay;
-		//必须得本地化，这样多人游戏的服务器中，每个人的timerhandle才不会冲突
-		//因为每个人的timerhandle都是一样的，这样如果创建再hfile，后一个就会覆盖前一个
+		// Must be localized so that each player's TimerHandle doesn't conflict in a multiplayer server
+		// Since all TimerHandles would be the same, creating one in the header would cause later ones to overwrite earlier ones
 		FTimerDelegate Delegate;
-		Delegate.BindUFunction(this, "RespawnPlayerElapsed", Player->GetController(),Player);
-		//delegate的好处就是可以给timer的函数传递一个变量
-		
+		Delegate.BindUFunction(this, "RespawnPlayerElapsed", Player->GetController(), Player);
+		// The delegate allows passing variables to the timer's function
+
 		float RespawnDelay = 2.0f;
 
 		GetWorldTimerManager().SetTimer(TimerHandle_RespawnDelay, Delegate, RespawnDelay, false);
 	}
 
-	//give credits for kill minion(AI)
+	// Give credits for killing minion (AI)
 	APawn* KillerPawn = Cast<APawn>(Killer);
 	if (KillerPawn)
 	{
 		ASPlayerState* PS = KillerPawn->GetPlayerState<ASPlayerState>();
-		if (PS)// <can cast and check for nullptr within id_statement
+		if (PS) // Can cast and check for nullptr within the if statement
 		{
 			PS->AddCredits(CreditsPerKill);
 		}
 	}
 }
 
-void ASGameModeBase::RespawnPlayerElapsed(AController* Controller,ASCharacter* SCharacter)
+void ASGameModeBase::RespawnPlayerElapsed(AController* Controller, ASCharacter* SCharacter)
 {
 	if (ensure(Controller))
 	{
 		Controller->UnPossess();
-		//不让控制 character了
+		// Release control of the character
 		SCharacter->Destroy();
-		//销毁尸体
+		// Destroy the corpse
 		RestartPlayer(Controller);
 	}
 }

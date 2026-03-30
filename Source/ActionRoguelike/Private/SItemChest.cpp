@@ -26,8 +26,8 @@ void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	bLidOpened = !bLidOpened;
 	OnRep_LidOpened();
-	//在server上也要手动触发一次，不然server上就少开盖的动作了
-	//在client上则是自动触发
+	// On the server, it must also be triggered manually; otherwise, the server would miss the lid-opening action
+	// On the client, it is triggered automatically
 }
 
 void ASItemChest::OnRep_LidOpened()
@@ -40,9 +40,9 @@ void ASItemChest::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//relicated只有server到client
-	//光replicated不够，一定要在这里注册过才行
-	//意思就是当这个blidopend的值变化了，就传输给所有的client
+	// Replication only works from server to client
+	// Simply marking it as replicated is not enough — it must also be registered here
+	// This means when the value of bLidOpened changes, it gets transmitted to all clients
 	DOREPLIFETIME(ASItemChest, bLidOpened);
 }
 

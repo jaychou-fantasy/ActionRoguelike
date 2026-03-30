@@ -35,7 +35,7 @@ public:
 
 
 
-	//replicate UObject's subobject一定要在他的附着的comp上面设置rep
+	// To replicate a UObject's subobject, you must set replication on the component it's attached to
 	bool ReplicateSubobjects(class UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 

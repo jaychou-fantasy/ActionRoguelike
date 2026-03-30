@@ -4,7 +4,7 @@
 #include "SGameplayFunctionLibrary.h"
 #include "SAttributeComponent.h"
 
-//产生伤害
+
 bool USGameplayFunctionLibrary::ApplyDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount)
 {
 	USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(TargetActor);
@@ -16,7 +16,7 @@ bool USGameplayFunctionLibrary::ApplyDamage(AActor* DamageCauser, AActor* Target
 }
 
 
-//施加冲击波
+//apply impulse
 bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount, const FHitResult& HitResult)
 {
 	if (ApplyDamage(DamageCauser, TargetActor, DamageAmount))
@@ -25,10 +25,11 @@ bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* DamageCauser, AAc
 		if (HitComp && HitComp->IsSimulatingPhysics(HitResult.BoneName))
 		{
 			FVector Direction = HitResult.TraceEnd - HitResult.TraceStart;
-			Direction.Normalize();//归一化，变成单位向量
+			Direction.Normalize(); // Normalize to a unit vector
 			HitComp->AddImpulseAtLocation(Direction * 300000.0f, HitResult.ImpactPoint, HitResult.BoneName);
-			UE_LOG(LogTemp,Warning,TEXT("Fire impulse!"))
-			//ImpactNormal就是返回impactpoint所在面的法线，比如我击中地面，返回一个竖直向上的vector（单位v），所以为了延续冲击力，把vector加个negative
+			UE_LOG(LogTemp, Warning, TEXT("Fire impulse!"))
+			// ImpactNormal returns the normal of the surface at the impact point. For example, if you hit the ground, it returns a vertical upward vector (unit vector).
+			// To apply an impulse that pushes away from the impact surface, you would negate the vector
 		}
 		return true;
 	}

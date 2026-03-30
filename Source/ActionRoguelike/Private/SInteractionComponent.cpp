@@ -39,12 +39,14 @@ void USInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 
 	APawn* MyPawn = Cast<APawn>(GetOwner());
-	//就比如，在client上，有你和其他玩家的interactioncomp，在你的client上，这些intercomp会一直run interact，现在只让locally的player run this funct
-	//但是islocallycontrole，就可以只计算我locally控制的这个角色-》进行交互
-	//还会-》client上的player1显示“press e”，然后这个ui也会在player2，3...上面显示
+	// For example, on the client, there are interaction components for you and other players.
+	// On your client, all these interaction components would run Interact logic continuously.
+	// This check ensures only the locally controlled player runs this function for interaction.
+	// IsLocallyControlled allows us to execute this only for the character I am locally controlling.
+	// However, this also means that on the client, Player 1's "Press E" widget will also be displayed for Player 2, Player 3, etc.
 	if (MyPawn->IsLocallyControlled())
 	{
-		//每个tick都要去寻找一下
+		// Check for interactable objects every tick
 		FindBestInteractable();
 	}
 }
@@ -66,7 +68,7 @@ void USInteractionComponent::FindBestInteractable()
 
 	//FHitResult Hit;
 	//bool bBlockingHit = GetWorld()->LineTraceSingleByObjectType(Hit, EyeLoaction, End, ObjectQueryParams);
-	//有default的可以不管
+	// If there's a default, it can be ignored
 
 	TArray<FHitResult> Hits;
 
@@ -87,7 +89,7 @@ void USInteractionComponent::FindBestInteractable()
 		if (bDebugDraw)
 		{
 			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, LineColor, false, 2.0f);
-			//32 是球体的细分段数（Segments）
+			// 32 is the number of segments for the sphere
 		}
 
 		AActor* HitActor = Hit.GetActor();//get the actor we hit
@@ -95,7 +97,7 @@ void USInteractionComponent::FindBestInteractable()
 		{
 			if (HitActor->Implements<USGamePlayInterface>())
 			{
-				//填充focuedactor，其实就是执勤的hitactor
+				// Populate FocusedActor — essentially the previous hit actor
 				FocusedActor = HitActor;
 				
 				break;
@@ -106,15 +108,15 @@ void USInteractionComponent::FindBestInteractable()
 		//break the forloop and drawdebugsphere wont work then
 	}
 	
-	//如果找到了hitactor（交互对象）
+	// If a hit actor (interactable object) is found
 	if (FocusedActor)
 	{
-		//创建widget
+		//create widget
 		if (DefaultWidgetInstance == nullptr && DefaultWidgetClass)
 		{
 			DefaultWidgetInstance = CreateWidget<USWorldUserWidget>(GetWorld(), DefaultWidgetClass);
 		}
-		//attach到minion身上  然后add to viewport
+		//attach to minion,  then add to viewport
 		if (DefaultWidgetInstance)
 		{
 			DefaultWidgetInstance->AttachedActor = FocusedActor;
@@ -125,7 +127,9 @@ void USInteractionComponent::FindBestInteractable()
 			}
 		}
 	}
-	//如果没找到交互对象，1->什么都不做，2->如果之前add to viewport了，那就remove掉
+	// If no interactable object is found: 
+	// 1. Do nothing
+	// 2. If it was previously added to the viewport, remove it
 	else
 	{
 		if (DefaultWidgetInstance)
@@ -149,22 +153,24 @@ void USInteractionComponent::PrimaryInteract()
 }
 
 
-//如果不额外传入一个InFocus，那么如果server的视角里没有focusedActor，那你的client就算有foucusactor（只是他本地），primaryInteract了，还是无法在server上运行
-//意思就是focusedActor是locally的变量，不同的client的foucuedactor的true/false是不一样的
+// If you don't pass in an extra InFocus parameter, then if the server's view doesn't have a FocusedActor, 
+// even if the client has a FocusedActor (only locally), calling PrimaryInteract won't work on the server.
+// This means FocusedActor is a local variable — different clients can have different true/false values for their FocusedActor.
 void USInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 {
-	//如果遇到没有交互对象还一直按e的，就跳debug信息
+	// If the interact key is pressed but there's no object to interact with, show debug info
 	if (InFocus == nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "No Focus Actor To Interact!");
 		return;
 	}
 
-	//如果有交互对象(那么前面每个tick调用一次的findbestinteractable就会帮你显示可交互的wiget)，那么就正常交互
-	//其实交互能否完成的判断在前面那个focusedactor==nullptr已经判断好了，findbest那个函数的意义：：找到是否有focuedactor && 显示widget
+	// If there is an object to interact with (FindBestInteractable, called every tick, will display the interact widget), proceed with interaction.
+	// The actual feasibility of the interaction is already determined by the focusedactor == nullptr check above.
+	// The purpose of FindBestInteractable is to determine if there's a FocusedActor and display the widget accordingly.
 	APawn* MyPawn = Cast<APawn>(GetOwner());
 
-	///////意思就是InFocus->Interact(MyPawn);的意思，只是没有上面那个写法
+	/////// This line means InFocus->Interact(MyPawn); just written in the UE interface execution syntax.
 	ISGamePlayInterface::Execute_Interact(InFocus, MyPawn);
 	///////
 }
