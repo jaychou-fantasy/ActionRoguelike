@@ -12,6 +12,23 @@ class UWorld;
  * 
  */
 
+USTRUCT()
+struct FActionRepData
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY()
+	bool bIsRunning;
+
+	//这样的话。server在进行projectile的动画时，client能“不仅仅显示projectile”，还能显示instigator的动作
+	//因为playanimmonatge是在instigator身上进行的
+	//而之前只replicated了bisrunning，而instigator没传递，所以会有“光看到projectile而没有动作”
+	UPROPERTY()
+	AActor* Instigator;
+};
+
 
 //Blueprintable就是表示这个类可以在蓝图里面创建子类，就比如创建一个BTTaskNode的子类，这里的BTTaskNode就是Blueprintable的
 UCLASS(Blueprintable)
@@ -34,12 +51,12 @@ protected:
 	FGameplayTagContainer BlockedTags;
 
 
-	UPROPERTY(ReplicatedUsing = "OnRep_IsRunning")
-	bool bIsRunning;
+	UPROPERTY(ReplicatedUsing = "OnRep_RepData")
+	FActionRepData RepData;
 
 	//现在是client的action能传到server，但是server的action改变发生却传不到client
 	UFUNCTION()
-	void OnRep_IsRunning();
+	void OnRep_RepData();
 
 public:
 	void Initialize(USActionComponent* NewActionComp);

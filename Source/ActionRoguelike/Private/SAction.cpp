@@ -41,7 +41,8 @@ void USAction::StartAction_Implementation(AActor* Instigator)
 	//都不用检查ensure，因为action就是在actioncomponent的addaction里面newobject出来的，所以肯定是有的
 	Comp->ActiveGameplayTags.AppendTags(GrantsTags);
 
-	bIsRunning = true;
+	RepData.bIsRunning = true;
+	RepData.Instigator = Instigator;
 }
 
 void USAction::StopAction_Implementation(AActor* Instigator)
@@ -54,7 +55,8 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.RemoveTags(GrantsTags);
 
-	bIsRunning = false;
+	RepData.bIsRunning = false;
+	RepData.Instigator = Instigator;
 }
 
 
@@ -82,22 +84,22 @@ USActionComponent* USAction::GetOwningComponent() const
 
 //在client里，如果server start了，那么isrunning变成true，onrep在client run startaction，这样server的player在client里就显示同样的动作了
 //所以要把上面stop的ensurealways给改了：因为client给sever_player执行stop的时候，bisrunning早就replicate为false了
-void USAction::OnRep_IsRunning()
+void USAction::OnRep_RepData()
 {
-	if (bIsRunning)
+	if (RepData.bIsRunning)
 	{
-		StartAction(nullptr);
+		StartAction(RepData.Instigator);
 	}
 	else
 	{
-		StopAction(nullptr);
+		StopAction(RepData.Instigator);
 	}
 }
 
 
 bool USAction::IsRunning() const
 {
-	return bIsRunning;
+	return RepData.bIsRunning;
 }
 
 
@@ -105,6 +107,6 @@ void USAction::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(USAction, bIsRunning);
+	DOREPLIFETIME(USAction,RepData);
 	DOREPLIFETIME(USAction, ActionComp);
 }
