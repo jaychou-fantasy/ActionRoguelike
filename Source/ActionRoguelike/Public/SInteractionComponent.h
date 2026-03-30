@@ -42,29 +42,29 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//只在c++里面调用，无需在bp里面使用，所以不需要加function
+	// Only called in C++, doesn't need to be used in Blueprint, so UFUNCTION is not required
 	void FindBestInteractable();
 
-	//要加uproperty，这样当交互的actor被销毁了，这个指针也会随之销毁，避免dangled pointer
+	// UPROPERTY must be added so that when the interactable actor is destroyed, this pointer is also properly cleared, preventing a dangling pointer
 	UPROPERTY()
 	AActor* FocusedActor;
 
 
-	//接下来的三个变量都是为了，更灵活的tweak交互范围 + 交互对象的collision type
-	UPROPERTY(EditDefaultsOnly,Category = "Trace")
+	// The next three variables are for more flexible tweaking of interaction range + the collision type of interactable objects
+	UPROPERTY(EditDefaultsOnly, Category = "Trace")
 	float TraceDistance;
 	UPROPERTY(EditDefaultsOnly, Category = "Trace")
 	float TraceRadius;
-	//他只是一个枚举值
-	//ECC_Visibility；ECC_Pawn；ECC_WorldDynamic这些都是他的枚举值，所以才写TEnumByte< >
+	// This is an enum value
+	// ECC_Visibility, ECC_Pawn, ECC_WorldDynamic are examples of its enum values, hence we use TEnumByte<>
 	UPROPERTY(EditDefaultsOnly, Category = "Trace")
 	TEnumAsByte<ECollisionChannel> CollisionChannel;
 
 
 	UPROPERTY()
 	USWorldUserWidget* DefaultWidgetInstance;
-	//上面那个是实例，是实打实的widget
-	//下面那个是class类型，是在bp编辑器里面设置的，设置类别后，这里的这个是实例会变成这个class的实例
+	// The above is an instance — an actual widget
+	// The following is a class type, set in the Blueprint editor. After setting the class type here, the instance above will become an instance of that class
 	UPROPERTY(EditDefaultsOnly,Category = "UI")
 	TSubclassOf<USWorldUserWidget> DefaultWidgetClass;
 

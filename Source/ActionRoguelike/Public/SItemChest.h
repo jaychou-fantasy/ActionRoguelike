@@ -33,7 +33,7 @@ protected:
 	UStaticMeshComponent* LidMesh;
 
 	
-	UPROPERTY(ReplicatedUsing = "OnRep_LidOpened", BlueprintReadOnly)//rep notify：每当lidopned的值变化时，通知所有client并且在client触发这个函数
+	UPROPERTY(ReplicatedUsing = "OnRep_LidOpened", BlueprintReadOnly)// RepNotify: Whenever the value of bLidOpened changes, it notifies all clients and triggers this function on the client side
 	bool bLidOpened;
 	
 	UFUNCTION()

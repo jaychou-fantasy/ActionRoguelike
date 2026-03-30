@@ -12,7 +12,7 @@
 class USphereComponent;
 class UStaticMeshComponent;
 
-//就是只能用来作为父类，自己不能产生作用
+// This class is meant to be used only as a parent class and cannot function on its own
 UCLASS(Abstract)
 class ACTIONROGUELIKE_API ASPowerupActor : public AActor, public ISGamePlayInterface
 {

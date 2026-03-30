@@ -34,5 +34,5 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "UI", meta = (ExposeOnSpawn=true))
 	AActor* AttachedActor;
-	//在saicharacter里面设置的this
+	//set in SAICharacter
 };

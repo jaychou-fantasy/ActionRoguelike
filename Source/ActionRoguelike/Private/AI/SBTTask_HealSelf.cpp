@@ -9,7 +9,7 @@
 EBTNodeResult::Type USBTTask_HealSelf::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     APawn* MyPawn = Cast<APawn>(OwnerComp.GetAIOwner()->GetPawn());
-    //由于下面没有ensure MyPawn,所以这里要cast
+    // Since there's no Ensure MyPawn below, we need to cast here
     if (MyPawn == nullptr)
     {
         return EBTNodeResult::Failed;

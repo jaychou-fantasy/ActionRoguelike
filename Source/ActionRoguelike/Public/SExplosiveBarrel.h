@@ -27,7 +27,7 @@ protected:
 	URadialForceComponent* ForceComp;
 
 	virtual void PostInitializeComponents() override;
-	//声明，就是我们会在cpp文件里面调用这个父类文件的这个函数。
+	// Declaration — this indicates that we will call this function from the parent class within the .cpp file
 
 	
 	// Called when the game starts or when spawned

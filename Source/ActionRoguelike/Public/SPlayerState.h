@@ -6,9 +6,9 @@
 #include "GameFramework/PlayerState.h"
 #include "SPlayerState.generated.h"
 
-//DELEGATE必须使用UPROPERTY来声明----BlueprintAssignable，不然无法在bp中使用
+// DELEGATE must be declared with UPROPERTY — and BlueprintAssignable — otherwise it cannot be used in Blueprint
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreditsChanged, ASPlayerState*, PlayerState, int32, NewCredits, int32, Delta);
-//创建delegate，到时候broadcast。再在需要接受这个信息的函数那边，adddynamic
+// Create a delegate to be broadcast later. Then, on the function that needs to receive this information, use AddDynamic to bind it.
 
 /**
  * 
@@ -29,7 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "Credits") // <Category|SubCategory
 	void AddCredits(int32 Delta);
 
-	//因为需要用于判断条件，比如能减去50credits才能购买，所以需要返回bool来判断
+	// Since this is used to check conditions — for example, being able to subtract 50 credits before purchasing — it needs to return a bool for validation
 	UFUNCTION(BlueprintCallable, Category = "Credits")
 	bool RemoveCredits(int32 Delta);
 

@@ -66,7 +66,7 @@ protected:
 	
 	UFUNCTION()
 	void OnBotSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
-	//不能用class来申明，因为type这个，所以必须涵盖整个namespace
+	// Cannot use "class" to declare this because of the type — the entire namespace must be included
 
 	UFUNCTION()
 	void OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
@@ -83,7 +83,8 @@ public:
 	ASGameModeBase();
 
 	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);
-	//这个是父类没有的函数，我用vritual是告诉编译器，以后asgame mode的子类可以override它
+	// This is a function that doesn't exist in the parent class. 
+	// I use virtual to tell the compiler that subclasses of ASGameMode can override it in the future
 
 	virtual void StartPlay() override;
 

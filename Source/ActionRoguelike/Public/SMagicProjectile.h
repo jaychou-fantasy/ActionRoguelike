@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly,Category="Damage")
 	float DamageAmount;
 
-	//这个是格挡需要的tag
+	//this is the tag of paarrig action needed
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FGameplayTag ParryTag;
 

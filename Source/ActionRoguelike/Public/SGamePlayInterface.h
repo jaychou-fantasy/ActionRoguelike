@@ -31,7 +31,7 @@ public:
 	//callable means you can call it in blueprint,otherwise you can only get it but cant call(use)it in blueprint;
 		void Interact(APawn* InstigatorPawn);
 
-	//反正都是override，所以不需要原定义
+	// Since we're overriding, the original definition is not needed
 
 
 

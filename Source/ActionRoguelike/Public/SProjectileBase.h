@@ -58,7 +58,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UAudioComponent* AudioComp;
 
-	//任何的asset比如soundcue，impactvfx（visual effects）啥的，必须附着在components上面 
+	//Any asset like:soundcue，impactvfx（visual effects）.etc，must attached to component;
 
 	
 

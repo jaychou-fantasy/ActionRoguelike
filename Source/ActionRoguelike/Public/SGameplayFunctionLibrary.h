@@ -19,10 +19,10 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "Gameplay")
 	static bool ApplyDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount);
 
-	//这个用来施加冲击力的impulse
+	// This is used to apply an impulse force
 	UFUNCTION(BlueprintCallable, Category = "Gameplay")
-	static bool ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount,const FHitResult& HitResult);
-	//如果是&，那么在bp里面就会变成output pin，但是加一个const，那么就会重新变回input pin，并且保留&的reference的作用
+	static bool ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount, const FHitResult& HitResult);
+	// If using & (reference) in Blueprint, it becomes an output pin, but adding const turns it back into an input pin while still retaining the reference behavior
 };
 
-//用library就是可以在bp里面直接用这些函数了。（所以要static bool）
+// Using a function library allows these functions to be used directly in Blueprint. (Hence the need for static bool)
