@@ -74,6 +74,13 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	{
 		return false;
 	}
+    
+    //if(!GetOwner()->HasAuthority())
+    //{
+    //    return false;
+    //}
+    //you cant write like that,'casue if that,the projectile will never explode(casue the second proj was created by client),then it seems like pass through character's body like gods_mode
+    //so just go to the essence->health change
 
 	if (Delta < 0.0f)
 	{
@@ -83,32 +90,35 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 
 	// Health += Delta;
 	float OldHealth = Health;
-
-	Health = FMath::Clamp(Health + Delta, 0.0f, HealthMax); // Clamp health to valid range after adding Delta
-
-	float ActualDelta = Health - OldHealth;
+    float NewHealth = FMath::Clamp(Health + Delta, 0.0f, HealthMax); // Clamp health to valid range after adding Delta
+    //we write it  above the HasAuthoirty() is bacuase:we want to convey the result of(do hit,and return true->so expode vfx will execute),Anyway,the actual delta would only be listened by delegate when HasAuthoirty();-->MulticastHealthChange();
+    float ActualDelta = Health - OldHealth;
+    
+    if(GetOwner()->HasAuthority())
+    {
+        Health = NewHealth;
+        
+        //***
+        // OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
+        // The multicast version below is used so that when registered on the server, it gets called on all clients as well
+        if (ActualDelta != 0)
+        {
+            MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
+        }
+        //***
+        // Died
+        if (ActualDelta < 0.0f && Health <= 0.0f)
+        {
+            ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
+            if (GM)
+            {
+                GM->OnActorKilled(GetOwner(), InstigatorActor);
+            }
+        }
+    }
 
 	UE_LOG(LogTemp, Log, TEXT("ApplyHealthChange: Owner=%s NewHealth=%f Delta=%f"), *GetNameSafe(GetOwner()), Health, ActualDelta);
 
-	//***
-	// OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
-	// The multicast version below is used so that when registered on the server, it gets called on all clients as well
-	if (ActualDelta != 0)
-	{
-		MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
-	}
-	//***
-
-
-	// Died
-	if (ActualDelta < 0.0f && Health <= 0.0f)
-	{
-		ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
-		if (GM)
-		{
-			GM->OnActorKilled(GetOwner(), InstigatorActor);
-		}
-	}
 	return ActualDelta != 0;
 	// Returns true if there was an actual change, false otherwise
 }
