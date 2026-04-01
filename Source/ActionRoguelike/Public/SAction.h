@@ -31,7 +31,9 @@ public:
 
 
 // Blueprintable indicates that this class can have child classes created in Blueprint ¡ª for example, creating a subclass of BTTaskNode.
-// In this case, BTTaskNode itself is marked as Blueprintable.UCLASS(Blueprintable)
+// In this case, BTTaskNode itself is marked as Blueprintable.
+
+UCLASS(Blueprintable)
 class ACTIONROGUELIKE_API USAction : public UObject
 {
 	GENERATED_BODY()
