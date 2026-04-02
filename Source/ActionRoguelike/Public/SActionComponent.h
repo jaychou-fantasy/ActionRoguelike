@@ -47,6 +47,9 @@ protected:
 	UFUNCTION(Server,Reliable)
 	void ServerStartActionByName(AActor* Instigator, FName ActionName);
 
+	UFUNCTION(Server, Reliable)
+	void ServerStopActionByName(AActor* Instigator, FName ActionName);
+
 	//accomplish in beginplay 
 	//Grant Abilities at GameStart
 	UPROPERTY(EditAnywhere, Category = "Actions")

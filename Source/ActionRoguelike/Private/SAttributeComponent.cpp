@@ -106,6 +106,7 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
             MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
         }
         //***
+		// 
         // Died
         if (ActualDelta < 0.0f && Health <= 0.0f)
         {

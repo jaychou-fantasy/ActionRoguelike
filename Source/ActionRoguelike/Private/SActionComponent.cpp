@@ -17,6 +17,7 @@ USActionComponent::USActionComponent()
 }
 
 
+
 void USActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -42,13 +43,7 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	for (USAction* Action : Actions)
 	{
 		FColor TextColor = Action->IsRunning() ? FColor::Blue : FColor::White;
-
-		FString ActionMsg = FString::Printf(TEXT("[%s] Action: %s : IsRunning: %s : Outer: %s"),
-			*GetNameSafe(GetOwner()),
-			*Action->ActionName.ToString(),
-			Action->IsRunning() ? TEXT("true") : TEXT("false"),
-			*GetNameSafe(Action->GetOuter()));
-
+		FString ActionMsg = FString::Printf(TEXT("[%s] Action: %s : IsRunning: %s"),*GetNameSafe(GetOwner()),*Action->ActionName.ToString(),Action->IsRunning() ? TEXT("true") : TEXT("false"));
 		LogOnScreen(this, ActionMsg, TextColor, 0.0f);
 	}
 
@@ -56,29 +51,38 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
 {
-	if (ensure(ActionClass))
+	if (!ensure(ActionClass))
 	{
-		// The Outer can be thought of as a container. When we create a new action here with ActionComponent as the Outer,
-		// if the ActionComponent (the Outer) is destroyed, all actions within it will also be destroyed.
-		// Here, the action's Outer is set to ActionComponent.
-		// This means action->GetOuter() returns ActionComponent, and action->GetOuter()->GetOuter() returns the SCharacter.
-		USAction* NewAction = NewObject<USAction>(GetOuter(), ActionClass);
-		NewAction->Initialize(this);
-		// Similar to CreateDefaultSubobject
+		return;
+	}
 
-		if (ensure(NewAction))
+	// Skip for clients
+	if (!GetOwner()->HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Client attempting to AddAction. [Class: %s]"), *GetNameSafe(ActionClass));
+		return;
+	}
+	
+	// The Outer can be thought of as a container. When we create a new action here with ActionComponent as the Outer,
+	// if the ActionComponent (the Outer) is destroyed, all actions within it will also be destroyed.
+	// Here, the action's Outer is set to ActionComponent.
+	// This means action->GetOuter() returns ActionComponent, and action->GetOuter()->GetOuter() returns the SCharacter.
+	USAction* NewAction = NewObject<USAction>(GetOuter(), ActionClass);
+	NewAction->Initialize(this);
+	// Similar to CreateDefaultSubobject
+
+	if (ensure(NewAction))
+	{
+		Actions.Add(NewAction);
+		UE_LOG(LogTemp, Log, TEXT("Add action named:%s"), *GetNameSafe(NewAction));
+
+		// Next, we design a way to automatically add actions without needing to specify them in DefaultActions,
+		// but instead via bAutoStart.
+		// (This is essentially equivalent to manually adding them in UE, but by changing the bAutoStart value in specific action subclasses,
+		// you can decide whether to auto-start the action during BeginPlay.)
+		if (NewAction->bAutoStart && NewAction->CanStart(Instigator))
 		{
-			Actions.Add(NewAction);
-			UE_LOG(LogTemp, Log, TEXT("Add action named:%s"), *GetNameSafe(NewAction));
-
-			// Next, we design a way to automatically add actions without needing to specify them in DefaultActions,
-			// but instead via bAutoStart.
-			// (This is essentially equivalent to manually adding them in UE, but by changing the bAutoStart value in specific action subclasses,
-			// you can decide whether to auto-start the action during BeginPlay.)
-			if (NewAction->bAutoStart && NewAction->CanStart(Instigator))
-			{
-				NewAction->StartAction(Instigator);
-			}
+			NewAction->StartAction(Instigator);
 		}
 	}
 }
@@ -137,6 +141,11 @@ bool USActionComponent::StopActionByName(AActor* Instigator, FName ActionName)
 		{
 			if (Action->IsRunning())
 			{
+				if (!GetOwner()->HasAuthority())
+				{
+					ServerStopActionByName(Instigator, ActionName);
+				}
+
 				Action->StopAction(Instigator);
 				return true;
 			}
@@ -172,6 +181,12 @@ bool USActionComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* B
 // It's fine that the return value isn't used elsewhere because Channel->ReplicateSubobject(Action, *Bunch, *RepFlags) already handles replicating the Action
 // (synchronizing server changes to the client).
 // Client-to-server replication is handled via ServerStartActionByName.
+
+
+void USActionComponent::ServerStopActionByName_Implementation(AActor* Instigator, FName ActionName)
+{
+	StopActionByName(Instigator, ActionName);
+}
 
 
 void USActionComponent::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

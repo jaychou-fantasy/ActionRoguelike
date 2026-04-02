@@ -21,12 +21,17 @@ void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
 		// The flash effect is attached to the hand's MeshComponent
 		UGameplayStatics::SpawnEmitterAttached(CastingEffect, Character->GetMesh(), HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 
-		FTimerHandle TimerHandle_AttackDelay;
-		FTimerDelegate Delegate;
-		Delegate.BindUFunction(this, "AttackDelay_Elapsed", Character);
+		//the above sentence are same time triggered no matter you are server/client,and we just dont want the client accidently create an extra projectile
+		//so we just need to limit the timer only
+		if (Instigator->HasAuthority())
+		{
+			FTimerHandle TimerHandle_AttackDelay;
+			FTimerDelegate Delegate;
+			Delegate.BindUFunction(this, "AttackDelay_Elapsed", Character);
 
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttackDelay, Delegate, AttackAnimDelay, false);// Normally, inside a Character subclass, you can directly use GetTimerManager, 
-		// but outside of it, you need to use GetWorld
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttackDelay, Delegate, AttackAnimDelay, false);// Normally, inside a Character subclass, you can directly use GetTimerManager, 
+			// but outside of it, you need to use GetWorld
+		}
 	}
 }
 
