@@ -1,0 +1,474 @@
+[
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/ActionRoguelike.Build.cs",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/ActionRoguelike.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/ActionRoguelike.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SAICharacter.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SAIController.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SBTService_CheckAttackRange.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SBTService_CheckHealth.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SBTTask_HealSelf.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/AI/SBTTask_RangedAttack.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SAction.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SActionComponent.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SActionEffect.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SAction_ProjectileAttack.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SAttributeComponent.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SCharacter.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SDashProjectile.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SExplosiveBarrel.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SGameModeBase.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SGamePlayInterface.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SGameplayFunctionLibrary.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SInteractionComponent.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SItemChest.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SMagicProjectile.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SPlayerState.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SPowerupActor.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SPowerup_Credits.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SPowerup_HealthPotion.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SProjectileBase.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SSaveGame.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/STargetDummy.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SWorldUserWidget.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SAICharacter.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SAIController.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SBTService_CheckAttackRange.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SBTService_CheckHealth.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SBTTask_HealSelf.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/AI/SBTTask_RangedAttack.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SAction.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SActionComponent.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SActionEffect.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SAction_ProjectileAttack.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SAttributeComponent.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SCharacter.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SDashProjectile.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SExplosiveBarrel.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SGameModeBase.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SGamePlayInterface.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SGameplayFunctionLibrary.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SInteractionComponent.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SItemChest.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SMagicProjectile.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SPlayerState.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SPowerupActor.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SPowerup_Credits.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SPowerup_HealthPotion.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SProjectileBase.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SSaveGame.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/STargetDummy.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SWorldUserWidget.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	}
+]

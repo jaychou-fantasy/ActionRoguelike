@@ -12,6 +12,7 @@
 #include "DrawDebugHelpers.h"
 #include "SCharacter.h"
 #include "SPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -21,7 +22,7 @@ static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"),true,TEXT("
 
 ASGameModeBase::ASGameModeBase()
 {
-	// This PlayerStateClass is a built-in option in GameMode ¡ª the kind you select in Blueprint by choosing which State Class to assign
+	// This PlayerStateClass is a built-in option in GameMode ï¿½ï¿½ the kind you select in Blueprint by choosing which State Class to assign
 	PlayerStateClass = ASPlayerState::StaticClass();
 
 	SpawnTimerInterval = 2.0f;
@@ -30,6 +31,33 @@ ASGameModeBase::ASGameModeBase()
 	DesiredPowerupCount = 10;
 	RequiredPowerupDistance = 2000.0f;
 }
+
+void ASGameModeBase::WriteSaveGame()
+{
+	USGameplayStatics::SaveGameToSlot(CurrentSaveGame,SlotName,0);
+}
+
+void ASGameModeBase::LoadSaveGame()
+{
+	if(UGameplayStatics::DoesSaveGameExist(SlotName,0))
+	{
+		CurrentSaveGame = Cast<USSaveGame>(USGameplayStatics::LoadGameFromSlot(SlotName,0));
+	    if(CurrentSaveGame ==nullptr)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Failed to load Savegame Data."));
+			return;
+		}
+
+		UE_LOG(LogTemp,Log,TEXT("Loaded SaveGame Data."));
+	}
+	else
+	{
+		CurrentSaveGame = Cast<USSaveGame>(USGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
+	
+		UE_LOG(LogTemp,Log,TEXT("Created new SaveGame Data."));
+	}
+}
+
 
 
 void ASGameModeBase::KillAll()
@@ -50,7 +78,7 @@ void ASGameModeBase::StartPlay()
 	Super::StartPlay();
 
 	// Actually, this SpawnBotTimeElapsed could be written directly in StartPlay, but doing it this way is a bit clearer
-	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBot, this, &ASGameModeBase::SpawnBotTimeElapsed, SpawnTimerInterval, true);//trueÊÇBloop
+	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBot, this, &ASGameModeBase::SpawnBotTimeElapsed, SpawnTimerInterval, true);//trueï¿½ï¿½Bloop
 	
 	SpawnPowerupTimeElapsed();
 }
@@ -142,7 +170,7 @@ void ASGameModeBase::SpawnPowerupTimeElapsed()
 		{
 			UE_LOG(LogTemp, Log, TEXT("EQS Query Started"));
 
-			// When the query finishes, it's a delegate ¡ª once completed, it transmits information. Our new function needs this data, so we use AddDynamic
+			// When the query finishes, it's a delegate ï¿½ï¿½ once completed, it transmits information. Our new function needs this data, so we use AddDynamic
 			QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ASGameModeBase::OnPowerupSpawnQueryCompleted);
 		}
 	}
@@ -208,7 +236,7 @@ void ASGameModeBase::OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrap
 			UE_LOG(LogTemp, Error, TEXT("RandomPowerupClass is NULL"));
 		}
 
-		if (AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(RandomPowerupClass, PickedLocation, FRotator::ZeroRotator))   // The SpawnParameter uses default values ¡ª what's the difference?
+		if (AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(RandomPowerupClass, PickedLocation, FRotator::ZeroRotator))   // The SpawnParameter uses default values ï¿½ï¿½ what's the difference?
 		{
 			UE_LOG(LogTemp, Log, TEXT("Spawn SUCCESS: %s"), *SpawnedActor->GetName());
 		}

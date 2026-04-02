@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug ActionRoguelike Editor",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/Users/jayaram/GitHub/ActionRoguelike/Binaries/Mac/ActionRoguelikeEditor.app/Contents/MacOS/ActionRoguelikeEditor",
+            "args": [
+                "/Users/jayaram/GitHub/ActionRoguelike/ActionRoguelike.uproject"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build UE Project"
+        }
+    ]
+}

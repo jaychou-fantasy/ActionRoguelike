@@ -6,10 +6,12 @@
 #include "GameFramework/GameModeBase.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "SGameModeBase.generated.h"
+#include "SSaveGame.h"
 
 class UEnvQueryInstanceBlueprintWrapper;
 class UEnvQuery;
 class UCurveFloat;
+class USSaveGame;
 
 /**
  * 
@@ -21,6 +23,11 @@ class ACTIONROGUELIKE_API ASGameModeBase : public AGameModeBase
 	
 
 protected:
+	FString SlotName;
+
+	UPROPERTY()
+	USSaveGame* CurrentSaveGame;
+
 
 	FTimerHandle TimerHandle_SpawnBot;
 	
@@ -50,7 +57,7 @@ protected:
 	int32 DesiredPowerupCount;
 
 	/* All power-up classes used to spawn with EQS at match start */
-	//±ÈÈçpotionºÍpowerup_credits
+	//ï¿½ï¿½ï¿½ï¿½potionï¿½ï¿½powerup_credits
 	UPROPERTY(EditDefaultsOnly,Category = "Powerups")
 	TArray<TSubclassOf<AActor>> PowerupClasses;
 
@@ -66,7 +73,7 @@ protected:
 	
 	UFUNCTION()
 	void OnBotSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
-	// Cannot use "class" to declare this because of the type ¡ª the entire namespace must be included
+	// Cannot use "class" to declare this because of the type ï¿½ï¿½ the entire namespace must be included
 
 	UFUNCTION()
 	void OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
@@ -87,5 +94,11 @@ public:
 	// I use virtual to tell the compiler that subclasses of ASGameMode can override it in the future
 
 	virtual void StartPlay() override;
+
+
+	UFUNCTION(BlueprinCallable,Category = "SaveGame")
+	void WriteSaveGame();
+
+	void LoadSaveGame();
 
 };
