@@ -92,7 +92,7 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	float OldHealth = Health;
     float NewHealth = FMath::Clamp(Health + Delta, 0.0f, HealthMax); // Clamp health to valid range after adding Delta
     //we write it  above the HasAuthoirty() is bacuase:we want to convey the result of(do hit,and return true->so expode vfx will execute),Anyway,the actual delta would only be listened by delegate when HasAuthoirty();-->MulticastHealthChange();
-    float ActualDelta = Health - OldHealth;
+    float ActualDelta = NewHealth - OldHealth;
     
     if(GetOwner()->HasAuthority())
     {
@@ -104,6 +104,8 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
         if (ActualDelta != 0)
         {
             MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
+
+			UE_LOG(LogTemp, Log, TEXT("ApplyHealthChange: Owner=%s NewHealth=%f Delta=%f"), *GetNameSafe(GetOwner()), Health, ActualDelta);
         }
         //***
 		// 
@@ -117,8 +119,6 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
             }
         }
     }
-
-	UE_LOG(LogTemp, Log, TEXT("ApplyHealthChange: Owner=%s NewHealth=%f Delta=%f"), *GetNameSafe(GetOwner()), Health, ActualDelta);
 
 	return ActualDelta != 0;
 	// Returns true if there was an actual change, false otherwise

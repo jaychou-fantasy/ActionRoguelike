@@ -44,6 +44,7 @@ void ASAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void ASAICharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	
 	// OnSeePawn is a dynamic delegate that is triggered when a new Pawn is perceived
 	// This delegate then calls our defined OnPawnSeen function
 	PawnSensingComp->OnSeePawn.AddDynamic(this,&ASAICharacter::OnPawnSeen);
