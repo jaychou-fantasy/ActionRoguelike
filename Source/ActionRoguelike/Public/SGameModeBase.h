@@ -5,8 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
-#include "SGameModeBase.generated.h"
 #include "SSaveGame.h"
+#include "SGameModeBase.generated.h"
+
 
 class UEnvQueryInstanceBlueprintWrapper;
 class UEnvQuery;
@@ -96,7 +97,7 @@ public:
 	virtual void StartPlay() override;
 
 
-	UFUNCTION(BlueprinCallable,Category = "SaveGame")
+	UFUNCTION(BlueprintCallable,Category = "SaveGame")
 	void WriteSaveGame();
 
 	void LoadSaveGame();

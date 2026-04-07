@@ -24,12 +24,19 @@ public:
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
 protected:
 
 	USWorldUserWidget* ActiveHealthBar;
 
 	UPROPERTY(EditAnywhere,Category = "UI")
 	TSubclassOf<UUserWidget> HealthBarWidgetClass;
+	
+	//Widget to display when bot fiest spot a player
+	UPROPERTY(EditDefaultsOnly,Category = "UI")
+	TSubclassOf<UUserWidget> SpottedWidgetClass;
+	
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -43,9 +50,13 @@ protected:
 
 
 	// This TimeToHit name is tied to the material, so don't change it
+	//Material paramter for Hitflash
 	UPROPERTY(VisibleAnywhere,Category = "Effects")
 	FName TimeToHitParamName;
 
+	//Key for AI Blackboard 'TargetActor'
+	UPROPERTY(VisibleAnywhere)
+	FName TargetActorKey;
 	
 
 	virtual void PostInitializeComponents() override;
@@ -57,9 +68,10 @@ protected:
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
-	UFUNCTION()
-	void SetTargetActor(AActor* T_Actor);
-
-public:	
+	UFUNCTION(BlueprintCallable,Category = "AI")
+	void SetTargetActor(AActor* NewTarget);
+	
+	UFUNCTION(BlueprintCallable,Category = "AI")
+	AActor* GetTargetActor() const;
 
 };

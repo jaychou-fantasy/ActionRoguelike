@@ -21,7 +21,7 @@ void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
 		// The flash effect is attached to the hand's MeshComponent
 		UGameplayStatics::SpawnEmitterAttached(CastingEffect, Character->GetMesh(), HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 
-		//the above sentence are same time triggered no matter you are server/client,and we just dont want the client accidently create an extra projectile
+		//the above sentence are same time triggered no matter you are server/client,and we just dont want the client accidentally create an extra projectile
 		//so we just need to limit the timer only
 		if (Instigator->HasAuthority())
 		{
@@ -40,14 +40,14 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 	//it would only warn at the first time "ensure return false" 
 	// and the game process wont stop
 	// while "check" would occur immediately halt;
-	//ensureAlawys ---- that warns you every tick
+	//ensureAlways ---- that warns you every tick
 	if (ensureAlways(ProjectileClass)) {
 
 		FVector HandLocation = InstigatorCharacter->GetMesh()->GetSocketLocation(HandSocketName);
 		//FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
 
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//chcek if the actor can just move alittle bit to spawn without collision
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//check if the actor can just move alittle bit to spawn without collision
 		SpawnParams.Instigator = InstigatorCharacter;
 
 		//this version is : aim at the direction of the controller,then we edit towards the "crosshair"

@@ -97,7 +97,7 @@ void USInteractionComponent::FindBestInteractable()
 		{
 			if (HitActor->Implements<USGamePlayInterface>())
 			{
-				// Populate FocusedActor ¡ª essentially the previous hit actor
+				// Populate FocusedActor ï¿½ï¿½ essentially the previous hit actor
 				FocusedActor = HitActor;
 				
 				break;
@@ -137,9 +137,7 @@ void USInteractionComponent::FindBestInteractable()
 			DefaultWidgetInstance->RemoveFromParent();
 		}
 	}
-
-
-
+	
 	if (bDebugDraw)
 	{
 		DrawDebugLine(GetWorld(), EyeLoaction, End, LineColor, false, 2.0f, 0, 2.0f);//2s,2cm
@@ -155,7 +153,7 @@ void USInteractionComponent::PrimaryInteract()
 
 // If you don't pass in an extra InFocus parameter, then if the server's view doesn't have a FocusedActor, 
 // even if the client has a FocusedActor (only locally), calling PrimaryInteract won't work on the server.
-// This means FocusedActor is a local variable ¡ª different clients can have different true/false values for their FocusedActor.
+// This means FocusedActor is a local variable ï¿½ï¿½ different clients can have different true/false values for their FocusedActor.
 void USInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 {
 	// If the interact key is pressed but there's no object to interact with, show debug info

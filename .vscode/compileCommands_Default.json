@@ -96,6 +96,14 @@
 		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
 	},
 	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SActionEffect_Thorns.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
 		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SAction_ProjectileAttack.cpp",
 		"arguments": [
 			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
@@ -177,6 +185,14 @@
 	},
 	{
 		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SMagicProjectile.cpp",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Private/SPlayerController.cpp",
 		"arguments": [
 			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
 			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"
@@ -320,6 +336,14 @@
 		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
 	},
 	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SActionEffect_Thorns.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
 		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SAction_ProjectileAttack.h",
 		"arguments": [
 			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
@@ -401,6 +425,14 @@
 	},
 	{
 		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SMagicProjectile.h",
+		"arguments": [
+			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"
+		],
+		"directory": "/Users/Shared/EpicGames/UE_5.7/Engine/Source"
+	},
+	{
+		"file": "/Users/jayaram/GitHub/ActionRoguelike/Source/ActionRoguelike/Public/SPlayerController.h",
 		"arguments": [
 			"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
 			"@/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default/ActionRoguelike.1.rsp"

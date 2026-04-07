@@ -4,6 +4,8 @@
 #include "SAttributeComponent.h"
 #include "SGameModeBase.h"
 #include "Net/UnrealNetwork.h"
+//for fully defined UWORLD class
+#include "Engine/World.h"
 
 
 static TAutoConsoleVariable<float> CVarDamageMultiplier(TEXT("su.DamageMultiplier"), 1.0f, TEXT("Global Damage Modifier for Attribute Component."), ECVF_Cheat);
@@ -14,6 +16,10 @@ USAttributeComponent::USAttributeComponent()
 	HealthMax = 100.0f;
 
 	Health = HealthMax;
+	
+	Rage = 0.0f;
+	
+	RageMax = 100.0f;
 
 	SetIsReplicatedByDefault(true);
 }
@@ -24,7 +30,7 @@ USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
 	{
 		return Cast<USAttributeComponent>(FromActor->GetComponentByClass(USAttributeComponent::StaticClass()));
 	}
-	//defalut retun nullptr
+	//default return nullptr
 	return nullptr;
 }
 
@@ -35,11 +41,9 @@ bool USAttributeComponent::IsActorAlive(AActor* Check_Actor)
 	{
 		return AttributeComp->IsAlive();
 	}
-	//defalut retun false
+	//defaultt return false
 	return false;
 }
-
-
 
 
 bool USAttributeComponent::IsFullHealth() const
@@ -52,9 +56,15 @@ float USAttributeComponent::GetHealthMax() const
 	return HealthMax;
 }
 
+
 float USAttributeComponent::GetHealth() const
 {
 	return Health;
+}
+
+float USAttributeComponent::GetRage() const
+{
+	return Rage;
 }
 
 bool USAttributeComponent::IsAlive() const
@@ -97,7 +107,6 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
     if(GetOwner()->HasAuthority())
     {
         Health = NewHealth;
-        
         //***
         // OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
         // The multicast version below is used so that when registered on the server, it gets called on all clients as well
@@ -124,9 +133,33 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	// Returns true if there was an actual change, false otherwise
 }
 
+bool USAttributeComponent::ApplyRage(AActor* Instigator, float Delta)
+{
+	float OldRage = Rage;
+	float NewRage = FMath::Clamp(Rage + Delta,0.0f,RageMax);
+	
+	float ActualDelta = NewRage - OldRage;
+	if (GetOwner()->HasAuthority())
+	{
+		Rage = NewRage;
+		if (ActualDelta != 0.0f)
+		{
+			MulticastRageChanged(Instigator,Rage,ActualDelta);
+			UE_LOG(LogTemp, Log, TEXT("ApplyRageChange: Owner=%s NewRage=%f Delta=%f"), *GetNameSafe(GetOwner()), Rage, ActualDelta);
+		}
+	}
+	
+	return ActualDelta != 0;
+}
+
 void USAttributeComponent::MulticastHealthChanged_Implementation(AActor* Instigator, float NewHealth, float Delta)
 {
 	OnHealthChanged.Broadcast(Instigator, this, Health,Delta);
+}
+
+void USAttributeComponent::MulticastRageChanged_Implementation(AActor* Instigator, float NewRage, float Delta)
+{
+	OnRageChanged.Broadcast(Instigator,this,NewRage,Delta);
 }
 
 
@@ -136,7 +169,8 @@ void USAttributeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(USAttributeComponent, Health);
 	DOREPLIFETIME(USAttributeComponent, HealthMax);
+	DOREPLIFETIME(USAttributeComponent,Rage);
 
 	// DOREPLIFETIME_CONDITION(USAttributeComponent, HealthMax, COND_InitialOnly); 
-	// This replicates HealthMax only once at the initial moment ¡ª any subsequent changes to HealthMax will not be replicated
+	// This replicates HealthMax only once at the initial moment ï¿½ï¿½ any subsequent changes to HealthMax will not be replicated
 }

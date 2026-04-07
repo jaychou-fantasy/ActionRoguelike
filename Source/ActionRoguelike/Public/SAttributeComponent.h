@@ -7,6 +7,7 @@
 #include "SAttributeComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChanged, AActor*, InstigatorActor, USAttributeComponent*, OwningComp, float, NewHealth, float, Delta);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnRageChanged,AActor*, InstigatorActor,USAttributeComponent*,OwningComp, float, NewRage,float ,Delta);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ACTIONROGUELIKE_API USAttributeComponent : public UActorComponent
@@ -44,10 +45,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Replicated,Category = "Attributes")
 	float HealthMax;
 	
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Replicated,Category = "Attributes")
+	float Rage;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Replicated,Category = "Attributes")
+	float RageMax;
 	//HealthMax,Stamina,Strength.
-
-
-
+	
+	
 	// Health is replicated, but the broadcast is only for triggering UI changes, etc., so it doesn't need to be reliable — that would waste a lot of network resources
 	// Replication focuses on the end result. Values like 100 → 80 → 60 → 40 might only show 100 → 40, 
 	// whereas Multicast emphasizes every change, highlighting continuous transitions
@@ -59,34 +65,44 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)//@fixme:mark as unreliable once we move the 'state' out of our scharacter
 	void MulticastHealthChanged(AActor* Instigator, float NewHealth, float Delta);
 
+	UFUNCTION(NetMulticast,Reliable)//@fixme:same fix as above
+	void MulticastRageChanged(AActor* Instigator,float NewRage,float Delta);	
 
 public:	
 	// 'const' means you can only get value rather than tweak it
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	bool IsAlive() const; 
 
 	
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	bool ApplyHealthChange(AActor* InstigatorActor,float Delta);
 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	bool IsFullHealth() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	float GetHealthMax() const;
+	
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
+	float GetRage() const;
+	
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
+	bool ApplyRage(AActor* Instigator, float Delta);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	float GetHealth() const;
 	
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category = "Attributes")
 	bool Kill(AActor* Instigator);
 
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable,Category = "Attributes")
 	FOnHealthChanged OnHealthChanged;
 
+	UPROPERTY(BlueprintAssignable,Category = "Attributes")
+	FOnRageChanged OnRageChanged;
 
 };

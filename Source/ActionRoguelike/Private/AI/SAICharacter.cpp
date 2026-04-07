@@ -22,14 +22,17 @@ ASAICharacter::ASAICharacter()
 	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
 	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
-
+	
+	//disabled on capsule to let projectiles pass through capsule and hit meshcomp instead
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
+	//enabled on mesh to react to the incoming projectiles
 	GetMesh()->SetGenerateOverlapEvents(true);
 
-
+	//ensure we receive a controller when spawned in the level by our gamemode
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	TimeToHitParamName = "TimeToHit";
+	TargetActorKey = "TargetActor";
 
 }
 
@@ -51,19 +54,41 @@ void ASAICharacter::PostInitializeComponents()
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASAICharacter::OnHealthChanged);
 }
 
-void ASAICharacter::SetTargetActor(AActor* T_Actor)
+void ASAICharacter::SetTargetActor(AActor* NewTarget)
 {
 	AAIController* AIC = Cast<AAIController>(GetController());//usually, return a controller,but it's AI,so cast to it
 	if (ensure(AIC))
 	{
-		AIC->GetBlackboardComponent()->SetValueAsObject("TargetActor", T_Actor);
+		AIC->GetBlackboardComponent()->SetValueAsObject(TargetActorKey, NewTarget);
 	}
+}
+
+AActor* ASAICharacter::GetTargetActor() const
+{
+	AAIController* AIC = Cast<AAIController>(GetController());
+	if (AIC)
+	{
+		return Cast<AActor>(AIC->GetBlackboardComponent()->GetValueAsObject(TargetActorKey));
+	}
+	return nullptr;
 }
 
 void ASAICharacter::OnPawnSeen(APawn* Pawn)
 {
-	SetTargetActor(Pawn);
-	DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);// True :adds a shadow to the string, making it more noticeable
+	//ignore if target already set
+	if (GetTargetActor() != Pawn)
+	{
+		SetTargetActor(Pawn);
+	}
+	//widget name use default.it will not bother us anyway/anyhow
+	USWorldUserWidget* NewWidget = CreateWidget<USWorldUserWidget>(GetWorld(),SpottedWidgetClass);
+	if (NewWidget)
+	{
+		NewWidget->AttachedActor = this;
+		//Index of 10(or anything higher than default of 0) place this on top of any other widegt
+		//May end up behind minion health widget otherwise
+		NewWidget->AddToViewport(10);
+	}
 }
 
 
@@ -99,7 +124,7 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 			AAIController* AIC = Cast<AAIController>(GetController());
 			if (AIC)
 			{
-				AIC->GetBrainComponent()->StopLogic("Killed");// BrainComp is the brain component of the AI Controller ¡ª essentially the brain of the brain
+				AIC->GetBrainComponent()->StopLogic("Killed");// BrainComp is the brain component of the AI Controller ï¿½ï¿½ essentially the brain of the brain
 			}
 			//ragdoll
 			GetMesh()->SetAllBodiesSimulatePhysics(true);
@@ -107,7 +132,7 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 			// No collision box when dead
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			GetCharacterMovement()->DisableMovement();
-			// This stops the ragdoll from jittering ¡ª after falling apart, immediately disable collision and stop jittering
+			// This stops the ragdoll from jittering ï¿½ï¿½ after falling apart, immediately disable collision and stop jittering
 			//set lifespan
 			SetLifeSpan(3.0f);
 		}

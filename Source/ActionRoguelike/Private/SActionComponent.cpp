@@ -23,7 +23,7 @@ void USActionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	//server only
-	//let the server be the only owner of action£¬others are server'action,then replicated to client
+	//let the server be the only owner of actionï¿½1ï¿½7ï¿½1ï¿½7others are server'action,then replicated to client
 	if (GetOwner()->HasAuthority())
 	{
 		for (TSubclassOf<USAction> ActionClass : DefaultActions)
@@ -97,6 +97,18 @@ void USActionComponent::RemoveAction(USAction* ActionToRemove)
 	Actions.Remove(ActionToRemove);
 }
 
+USAction* USActionComponent::GetAction(TSubclassOf<USAction> ActionClass) const
+{
+	for (USAction* Action :Actions)
+	{
+		//SubclassToCheck->IsA(SomeParentClass)ï¼šis a function to check if SubclassToCheck is a subclass of the SomeParentClass
+		if (Action && Action->IsA((ActionClass)))
+		{
+			return Action;
+		}
+	}
+	return nullptr;
+}
 
 
 bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)

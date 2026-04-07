@@ -22,7 +22,7 @@ static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"),true,TEXT("
 
 ASGameModeBase::ASGameModeBase()
 {
-	// This PlayerStateClass is a built-in option in GameMode �� the kind you select in Blueprint by choosing which State Class to assign
+	// This PlayerStateClass is a built-in option in GameMode , the kind you select in Blueprint by choosing which State Class to assign
 	PlayerStateClass = ASPlayerState::StaticClass();
 
 	SpawnTimerInterval = 2.0f;
@@ -34,14 +34,14 @@ ASGameModeBase::ASGameModeBase()
 
 void ASGameModeBase::WriteSaveGame()
 {
-	USGameplayStatics::SaveGameToSlot(CurrentSaveGame,SlotName,0);
+	UGameplayStatics::SaveGameToSlot(CurrentSaveGame,SlotName,0);
 }
 
 void ASGameModeBase::LoadSaveGame()
 {
 	if(UGameplayStatics::DoesSaveGameExist(SlotName,0))
 	{
-		CurrentSaveGame = Cast<USSaveGame>(USGameplayStatics::LoadGameFromSlot(SlotName,0));
+		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName,0));
 	    if(CurrentSaveGame ==nullptr)
 		{
 			UE_LOG(LogTemp,Warning,TEXT("Failed to load Savegame Data."));
@@ -52,7 +52,7 @@ void ASGameModeBase::LoadSaveGame()
 	}
 	else
 	{
-		CurrentSaveGame = Cast<USSaveGame>(USGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
+		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
 	
 		UE_LOG(LogTemp,Log,TEXT("Created new SaveGame Data."));
 	}

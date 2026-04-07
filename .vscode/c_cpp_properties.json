@@ -13,7 +13,7 @@
 			"cStandard": "c17",
 			"cppStandard": "c++20",
 			"intelliSenseMode": "clang-arm64",
-			"compileCommands": "${workspaceFolder}/.vscode/compileCommands_ActionRoguelike.json"
+			"compileCommands": "/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_ActionRoguelike.json"
 		},
 		{
 			"name": "Mac",
@@ -28,7 +28,7 @@
 			"cStandard": "c17",
 			"cppStandard": "c++20",
 			"intelliSenseMode": "clang-arm64",
-			"compileCommands": "${workspaceFolder}/.vscode/compileCommands_Default.json"
+			"compileCommands": "/Users/jayaram/GitHub/ActionRoguelike/.vscode/compileCommands_Default.json"
 		}
 	]
 }

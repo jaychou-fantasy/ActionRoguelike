@@ -75,7 +75,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 }
 
 FVector ASCharacter::GetPawnViewLocation() const
-// When overriding, it looks at the lowest-level override ¡ª for example, APawn can override AActor, and ACharacter can override APawn, and so on
+// When overriding, it looks at the lowest-level override ï¿½ï¿½ for example, APawn can override AActor, and ACharacter can override APawn, and so on
 {
 	return CameraComp->GetComponentLocation();
 }
@@ -140,7 +140,6 @@ void ASCharacter::SprintStop()
 }
 
 
-
 void ASCharacter::PrimaryInteract()
 {
 	InteractionComp->PrimaryInteract();
@@ -154,6 +153,9 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	if (Delta < 0.0f)
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitName, GetWorld()->TimeSeconds);
+		//at same time,we apply rage_change,the Delta must be reverse damage delta
+		float RageDelta = FMath::Abs(Delta);
+		AttributeComp->ApplyRage(InstigatorActor,RageDelta);
 	}
 	
 	if (NewHealth <= 0.0f && Delta < 0.0f)
