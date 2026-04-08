@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float TargetPitch;
 
+	void OnActorLoad_Implementation();
+	
+	
 	void Interact_Implementation(APawn* InstigatorPawn);//this  _Implementation is a grammer requirement for implementing  funct Interact in SGamePlayInterface;
 	
 public:	
@@ -33,7 +36,7 @@ protected:
 	UStaticMeshComponent* LidMesh;
 
 	
-	UPROPERTY(ReplicatedUsing = "OnRep_LidOpened", BlueprintReadOnly)// RepNotify: Whenever the value of bLidOpened changes, it notifies all clients and triggers this function on the client side
+	UPROPERTY(ReplicatedUsing = "OnRep_LidOpened",BlueprintReadOnly, SaveGame)// RepNotify: Whenever the value of bLidOpened changes, it notifies all clients and triggers this function on the client side
 	bool bLidOpened;
 	
 	UFUNCTION()

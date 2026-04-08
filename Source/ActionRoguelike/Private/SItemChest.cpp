@@ -21,6 +21,11 @@ ASItemChest::ASItemChest()
 }
 
 
+void ASItemChest::OnActorLoad_Implementation()
+{
+	//so every time we enter the game ,the lidopen status would depend on the bLidOpen;
+	OnRep_LidOpened();
+}
 
 void ASItemChest::Interact_Implementation(APawn* InstigatorPawn) 
 {

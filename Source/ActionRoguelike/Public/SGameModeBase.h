@@ -9,6 +9,7 @@
 #include "SGameModeBase.generated.h"
 
 
+class ASCharacter;
 class UEnvQueryInstanceBlueprintWrapper;
 class UEnvQuery;
 class UCurveFloat;
@@ -87,7 +88,13 @@ protected:
 	void KillAll();
 
 public:
-
+	//really really early,even is before BeginPlay()
+	void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)override;
+	
+	//the parent function is "BlueprintNativeEvent",so _implementation
+	//a function calls when any new player logging in the game
+	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)override;
+	
 	ASGameModeBase();
 
 	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);

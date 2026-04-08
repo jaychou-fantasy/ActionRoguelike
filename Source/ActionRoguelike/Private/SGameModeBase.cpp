@@ -11,19 +11,22 @@
 #include "Curves/CurveFloat.h"
 #include "DrawDebugHelpers.h"
 #include "SCharacter.h"
+#include "SGamePlayInterface.h"
 #include "SPlayerState.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "GameFramework/GameStateBase.h"
+#include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 
 
 static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"),true,TEXT("Enable spawning of bots via timer."),ECVF_Cheat);
-
 
 
 ASGameModeBase::ASGameModeBase()
 {
 	// This PlayerStateClass is a built-in option in GameMode , the kind you select in Blueprint by choosing which State Class to assign
 	PlayerStateClass = ASPlayerState::StaticClass();
+	
+	SlotName = "SaveGame01";
 
 	SpawnTimerInterval = 2.0f;
 	CreditsPerKill = 20;
@@ -32,44 +35,129 @@ ASGameModeBase::ASGameModeBase()
 	RequiredPowerupDistance = 2000.0f;
 }
 
+void ASGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+	
+	LoadSaveGame();
+}
+
+
 void ASGameModeBase::WriteSaveGame()
 {
+	//Iterate all player states,we don't have proper ID to match yet(Require Steam or EOS)
+	for (int32 i =0;i<GameState->PlayerArray.Num();i++)
+		//gamestate is an array that save all player's states
+	{
+		ASPlayerState* PS = Cast<ASPlayerState>(GameState->PlayerArray[i]);
+		if (PS)
+		{
+			PS->SavePlayerState(CurrentSaveGame);
+			break; //single player only at this point
+		}
+	}
+	//we first save credit(update latedly in state) to currentSaveGame->Credit
+	//then save CurrentSaveGame
+	
+	//since we have decided to overwrite a new savegame,then actually we can just empty it and then write new data to avoid data overlap
+	CurrentSaveGame->SavedActors.Empty();
+	//iterate all actors to save
+	for (FActorIterator It(GetWorld());It;++It)
+	{
+		AActor* Actor = *It;
+		//only interested in our "Gameplay Actors"
+		if (!Actor->Implements<USGamePlayInterface>())
+		{
+			continue;
+		}
+		
+		FActorSaveData ActorData;
+		ActorData.ActorName = Actor->GetName();
+		ActorData.Transform = Actor->GetTransform();
+		
+		//memorywriter is a so-called proxy,archive write data in it,and it just write the data in ByteData
+		FMemoryWriter MemWriter(ActorData.ByteData);
+		//FArchive is a rule of how to save the data
+		//FArchive--FProxyArchive--FObjectAnd....
+		//this mean we save the data not in pointers,but the string address like /Game/Weapon/SM_Sword
+		FObjectAndNameAsStringProxyArchive Ar(MemWriter,true);
+		
+		//find only varibles with UPROPERTY(SaveGame)
+		Ar.ArIsSaveGame = true;
+		//convert actor'variable into binary array;
+		Actor->Serialize(Ar);
+		
+		CurrentSaveGame->SavedActors.Add(ActorData);
+		UE_LOG(LogTemp,Warning,TEXT("ActorData successfully added"))
+	}
+	
+	// save game to the ponited slot
 	UGameplayStatics::SaveGameToSlot(CurrentSaveGame,SlotName,0);
+	//save game to slot function would only save "CurrentSaveGame"(the things that you declare in SSaveGame class)
 }
 
 void ASGameModeBase::LoadSaveGame()
 {
 	if(UGameplayStatics::DoesSaveGameExist(SlotName,0))
 	{
+		//if gamesave exists,then load it from slot;
 		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName,0));
 	    if(CurrentSaveGame ==nullptr)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Failed to load Savegame Data."));
+			UE_LOG(LogTemp,Warning,TEXT("Failed to load SaveGaame Data."));
 			return;
 		}
-
-		UE_LOG(LogTemp,Log,TEXT("Loaded SaveGame Data."));
+		
+		for (FActorIterator It(GetWorld());It;++It)
+		{
+			AActor* Actor = *It;
+			if (!Actor->Implements<USGamePlayInterface>())
+			{
+				continue;
+			}
+			for (FActorSaveData ActorData : CurrentSaveGame->SavedActors)
+			{
+				if (ActorData.ActorName == Actor->GetName())
+				{
+					if (Actor->SetActorTransform(ActorData.Transform))
+					{
+						UE_LOG(LogTemp,Warning,TEXT("Loaded ActorTransform Data."));
+					}
+					
+					FMemoryReader MemReader(ActorData.ByteData);
+					FObjectAndNameAsStringProxyArchive Ar(MemReader,true);
+					//convert back(same function,inverse usage)
+					Actor->Serialize(Ar);
+					//serialize and deserialize is just to save UPROPERTY(SaveGame),more convenient than just save the variable you declared in SaveGame class
+					
+					ISGamePlayInterface::Execute_OnActorLoaded(Actor);
+					
+					break;//we now have only one character,so just early out to save cpuwork
+				}
+			}
+		}
 	}
 	else
+		//no need to iterate when first create a savegame object
 	{
+		//if not,then create a gamesave
 		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
 	
 		UE_LOG(LogTemp,Log,TEXT("Created new SaveGame Data."));
 	}
 }
 
-
-
-void ASGameModeBase::KillAll()
+//why we put our state_load here is because:
+//gamemode create(and actors)->init->loadsavegame->gamestate create->player controller->player state->handlestatringnewplayer->then can we load player_state
+//handleStartingNewPlayer------>to load playerstate
+void ASGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
-	for (TActorIterator<ASAICharacter> It(GetWorld()); It; ++It)
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+	
+	ASPlayerState* PS = NewPlayer->GetPlayerState<ASPlayerState>();
+	if (PS)
 	{
-		ASAICharacter* Bot = *It;
-		USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(Bot);
-		if (ensure(AttributeComp) && AttributeComp->IsAlive())
-		{
-			AttributeComp->Kill(this);//@fixme : add kill character for credits
-		}
+		PS->LoadPlayerState(CurrentSaveGame);
 	}
 }
 
@@ -291,5 +379,19 @@ void ASGameModeBase::RespawnPlayerElapsed(AController* Controller, ASCharacter* 
 		SCharacter->Destroy();
 		// Destroy the corpse
 		RestartPlayer(Controller);
+	}
+}
+
+
+void ASGameModeBase::KillAll()
+{
+	for (TActorIterator<ASAICharacter> It(GetWorld()); It; ++It)
+	{
+		ASAICharacter* Bot = *It;
+		USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(Bot);
+		if (ensure(AttributeComp) && AttributeComp->IsAlive())
+		{
+			AttributeComp->Kill(this);//@fixme : add kill character for credits
+		}
 	}
 }

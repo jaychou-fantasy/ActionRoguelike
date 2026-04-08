@@ -10,6 +10,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCreditsChanged, ASPlayerState*, PlayerState, int32, NewCredits, int32, Delta);
 // Create a delegate to be broadcast later. Then, on the function that needs to receive this information, use AddDynamic to bind it.
 
+class USSaveGame;
+
 /**
  * 
  */
@@ -23,6 +25,12 @@ protected:
 	int32 Credits;
 
 public:
+	UFUNCTION(BlueprintNativeEvent)
+	void SavePlayerState(USSaveGame* SaveObject);
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void LoadPlayerState(USSaveGame* SaveObject);
+	
 	UFUNCTION(BlueprintCallable,Category = "Credits")
 	int32 GetCredits() const;
 
