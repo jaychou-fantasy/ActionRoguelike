@@ -108,5 +108,6 @@ public:
 	void WriteSaveGame();
 
 	void LoadSaveGame();
+	void LoadActorData();
 
 };

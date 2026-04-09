@@ -21,7 +21,7 @@ ASItemChest::ASItemChest()
 }
 
 
-void ASItemChest::OnActorLoad_Implementation()
+void ASItemChest::OnActorLoaded_Implementation()
 {
 	//so every time we enter the game ,the lidopen status would depend on the bLidOpen;
 	OnRep_LidOpened();

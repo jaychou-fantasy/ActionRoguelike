@@ -18,6 +18,7 @@ void ASPlayerState::LoadPlayerState_Implementation(USSaveGame* SaveObject)
 	{
 		//just do the opppsite(on the contrary)
 		Credits = SaveObject->Credits;
+		UE_LOG(LogTemp,Warning,TEXT("PlayerState loaded"))
 	}
 	
 }

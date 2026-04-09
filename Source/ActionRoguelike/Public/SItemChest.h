@@ -18,7 +18,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float TargetPitch;
 
-	void OnActorLoad_Implementation();
+	void OnActorLoaded_Implementation();
 	
 	
 	void Interact_Implementation(APawn* InstigatorPawn);//this  _Implementation is a grammer requirement for implementing  funct Interact in SGamePlayInterface;

@@ -88,7 +88,7 @@ void ASGameModeBase::WriteSaveGame()
 		Actor->Serialize(Ar);
 		
 		CurrentSaveGame->SavedActors.Add(ActorData);
-		UE_LOG(LogTemp,Warning,TEXT("ActorData successfully added"))
+		UE_LOG(LogTemp,Warning,TEXT("ActorData: %s successfully added"),*Actor->GetName());//dereference,FString(actually a address)->*->*TChar--->so %s can use
 	}
 	
 	// save game to the ponited slot
@@ -98,44 +98,17 @@ void ASGameModeBase::WriteSaveGame()
 
 void ASGameModeBase::LoadSaveGame()
 {
+	UE_LOG(LogTemp,Warning,TEXT("Load SaveGame Called."));
 	if(UGameplayStatics::DoesSaveGameExist(SlotName,0))
 	{
 		//if gamesave exists,then load it from slot;
 		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName,0));
 	    if(CurrentSaveGame ==nullptr)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Failed to load SaveGaame Data."));
+			UE_LOG(LogTemp,Warning,TEXT("Failed to load SaveGame Data."));
 			return;
 		}
-		
-		for (FActorIterator It(GetWorld());It;++It)
-		{
-			AActor* Actor = *It;
-			if (!Actor->Implements<USGamePlayInterface>())
-			{
-				continue;
-			}
-			for (FActorSaveData ActorData : CurrentSaveGame->SavedActors)
-			{
-				if (ActorData.ActorName == Actor->GetName())
-				{
-					if (Actor->SetActorTransform(ActorData.Transform))
-					{
-						UE_LOG(LogTemp,Warning,TEXT("Loaded ActorTransform Data."));
-					}
-					
-					FMemoryReader MemReader(ActorData.ByteData);
-					FObjectAndNameAsStringProxyArchive Ar(MemReader,true);
-					//convert back(same function,inverse usage)
-					Actor->Serialize(Ar);
-					//serialize and deserialize is just to save UPROPERTY(SaveGame),more convenient than just save the variable you declared in SaveGame class
-					
-					ISGamePlayInterface::Execute_OnActorLoaded(Actor);
-					
-					break;//we now have only one character,so just early out to save cpuwork
-				}
-			}
-		}
+		//this place changed
 	}
 	else
 		//no need to iterate when first create a savegame object
@@ -143,7 +116,42 @@ void ASGameModeBase::LoadSaveGame()
 		//if not,then create a gamesave
 		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
 	
-		UE_LOG(LogTemp,Log,TEXT("Created new SaveGame Data."));
+		UE_LOG(LogTemp,Log,TEXT("Created New SaveGame Data."));
+	}
+}
+
+void ASGameModeBase::LoadActorData()
+{
+	for (FActorIterator It(GetWorld());It;++It)
+	{
+		AActor* Actor = *It;
+		if (!Actor->Implements<USGamePlayInterface>())
+		{
+			continue;
+		}
+		for (FActorSaveData ActorData : CurrentSaveGame->SavedActors)
+		{
+			if (ActorData.ActorName == Actor->GetName())
+			{
+				UE_LOG(LogTemp,Warning,TEXT("MATCHED ACTOR: %s"), *Actor->GetName());
+				if (Actor->SetActorTransform(ActorData.Transform))
+				{
+					UE_LOG(LogTemp,Warning,TEXT("Loaded ActorTransform Data."));
+				}
+					
+				FMemoryReader MemReader(ActorData.ByteData);
+				FObjectAndNameAsStringProxyArchive Ar(MemReader,true);
+				//convert back(same function,inverse usage)
+				Actor->Serialize(Ar);
+				UE_LOG(LogTemp,Warning,TEXT("Serialize succeed."));
+				//serialize and deserialize is just to save UPROPERTY(SaveGame),more convenient than just save the variable you declared in SaveGame class
+					
+				ISGamePlayInterface::Execute_OnActorLoaded(Actor);
+					
+				break;//one actor data only corresponding to one actor
+				//so if found,just break out for next actor to save workflow
+			}
+		}
 	}
 }
 
@@ -164,6 +172,9 @@ void ASGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* N
 void ASGameModeBase::StartPlay()
 {
 	Super::StartPlay();
+	
+	//LoadSaveGame();
+	LoadActorData();
 
 	// Actually, this SpawnBotTimeElapsed could be written directly in StartPlay, but doing it this way is a bit clearer
 	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBot, this, &ASGameModeBase::SpawnBotTimeElapsed, SpawnTimerInterval, true);//true��Bloop
