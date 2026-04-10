@@ -80,6 +80,13 @@ void ASAICharacter::OnPawnSeen(APawn* Pawn)
 	{
 		SetTargetActor(Pawn);
 	}
+	//NetMulticast will cast thi to all clients,as well as itself
+	MulticastOnPawnSeen(Pawn);
+}
+
+void ASAICharacter::MulticastOnPawnSeen_Implementation(APawn* Pawn)
+{
+	
 	//widget name use default.it will not bother us anyway/anyhow
 	USWorldUserWidget* NewWidget = CreateWidget<USWorldUserWidget>(GetWorld(),SpottedWidgetClass);
 	if (NewWidget)
@@ -90,7 +97,6 @@ void ASAICharacter::OnPawnSeen(APawn* Pawn)
 		NewWidget->AddToViewport(10);
 	}
 }
-
 
 void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {

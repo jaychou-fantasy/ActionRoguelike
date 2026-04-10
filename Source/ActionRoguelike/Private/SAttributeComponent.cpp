@@ -141,9 +141,11 @@ bool USAttributeComponent::ApplyRage(AActor* Instigator, float Delta)
 	float ActualDelta = NewRage - OldRage;
 	if (GetOwner()->HasAuthority())
 	{
+		//only server can update "Rage Attribute"
 		Rage = NewRage;
 		if (ActualDelta != 0.0f)
 		{
+			//and trigger RageChange
 			MulticastRageChanged(Instigator,Rage,ActualDelta);
 			UE_LOG(LogTemp, Log, TEXT("ApplyRageChange: Owner=%s NewRage=%f Delta=%f"), *GetNameSafe(GetOwner()), Rage, ActualDelta);
 		}
@@ -169,7 +171,8 @@ void USAttributeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(USAttributeComponent, Health);
 	DOREPLIFETIME(USAttributeComponent, HealthMax);
-	DOREPLIFETIME(USAttributeComponent,Rage);
+	DOREPLIFETIME(USAttributeComponent,Rage)
+	DOREPLIFETIME(USAttributeComponent,RageMax);
 
 	// DOREPLIFETIME_CONDITION(USAttributeComponent, HealthMax, COND_InitialOnly); 
 	// This replicates HealthMax only once at the initial moment �� any subsequent changes to HealthMax will not be replicated

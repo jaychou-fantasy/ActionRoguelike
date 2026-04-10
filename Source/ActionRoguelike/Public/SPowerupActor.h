@@ -27,7 +27,13 @@ protected:
 	
 	UPROPERTY(EditAnywhere,Category = "Powerup")
 	float RespawnTime;
-
+	
+	
+	UPROPERTY(ReplicatedUsing = "OnRep_IsActive")
+	bool bIsActive;
+	
+	UFUNCTION()
+	void OnRep_IsActive();
 	
 
 	FTimerHandle TimerHandle_RespawnTimer;

@@ -3,6 +3,12 @@
 
 #include "SPlayerState.h"
 #include "SSaveGame.h"
+#include "Net/UnrealNetwork.h"
+
+ASPlayerState::ASPlayerState()
+{
+	SetReplicates(true);
+}
 
 void ASPlayerState::SavePlayerState_Implementation(USSaveGame* SaveObject)
 {
@@ -17,7 +23,10 @@ void ASPlayerState::LoadPlayerState_Implementation(USSaveGame* SaveObject)
 	if (SaveObject)
 	{
 		//just do the opppsite(on the contrary)
-		Credits = SaveObject->Credits;
+		
+		//ensure we trigger credits changed event
+		AddCredits(SaveObject->Credits);
+		//Credits = SaveObject->Credits;
 		UE_LOG(LogTemp,Warning,TEXT("PlayerState loaded"))
 	}
 	
@@ -57,4 +66,20 @@ bool ASPlayerState::RemoveCredits(int32 Delta)
 	Credits -=Delta;
 	OnCreditsChanged.Broadcast(this, Credits, -Delta);
 	return true;
+}
+
+void ASPlayerState::OnRep_Credits(int32 OldCredits)
+{
+	OnCreditsChanged.Broadcast(this,Credits,Credits-OldCredits);
+}
+// void ASPlayerState::MulticastCredits_Implementation(float NewCredits, float Delta)
+// {
+// 	OnCreditsChanged.Broadcast(this, NewCredits, Delta);
+// }
+
+void ASPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) __const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ASPlayerState,Credits);
 }

@@ -27,17 +27,6 @@ public:
 
 
 protected:
-	
-	// EditAnywhere - edit in BP editor and per-instance in level.
-	// VisibleAnywhere - 'read-only' in editor and level. (Use for Components)
-	// EditDefaultsOnly - hide variable per-instance, edit in BP editor only               ---cant be editted in detailed panel for instance placed in level
-	// VisibleDefaultsOnly - 'read-only' access for variable, only in BP editor (uncommon)
-	// EditInstanceOnly - allow only editing of instance (eg. when placed in level)
-	// --
-	// BlueprintReadOnly - read-only in the Blueprint scripting (does not affect 'details'-panel)
-	// BlueprintReadWrite - read-write access in Blueprints
-	// --
-	// Category = "" - display only for detail panels and blueprint context menu.
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Replicated,Category = "Attributes")
 	float Health;
@@ -62,10 +51,10 @@ protected:
 	// Net Relevancy / Net Cull Distance: Actors that are far away are no longer replicated
 	// When declared as Unreliable, relevancy is taken into account (this is uncertain)
 	// If it's Reliable, relevancy is ignored (this is also uncertain)
-	UFUNCTION(NetMulticast, Reliable)//@fixme:mark as unreliable once we move the 'state' out of our scharacter
+	UFUNCTION(NetMulticast, Reliable)//@note:could mark as unreliable once we moved the 'state' out of scharacter (eg. once its cosmetic only)
 	void MulticastHealthChanged(AActor* Instigator, float NewHealth, float Delta);
 
-	UFUNCTION(NetMulticast,Reliable)//@fixme:same fix as above
+	UFUNCTION(NetMulticast,Unreliable)//@note:since we did't assign some dynamic UI change for rage,just set to unreliable
 	void MulticastRageChanged(AActor* Instigator,float NewRage,float Delta);	
 
 public:	

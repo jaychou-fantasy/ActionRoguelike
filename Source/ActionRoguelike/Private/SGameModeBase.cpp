@@ -115,7 +115,7 @@ void ASGameModeBase::LoadSaveGame()
 	{
 		//if not,then create a gamesave
 		CurrentSaveGame = Cast<USSaveGame>(UGameplayStatics::CreateSaveGameObject(USSaveGame::StaticClass()));
-	
+		//to ensure has a SaveGame instance to use in "WriteSaveGame"
 		UE_LOG(LogTemp,Log,TEXT("Created New SaveGame Data."));
 	}
 }
@@ -160,13 +160,14 @@ void ASGameModeBase::LoadActorData()
 //handleStartingNewPlayer------>to load playerstate
 void ASGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
-	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
-	
 	ASPlayerState* PS = NewPlayer->GetPlayerState<ASPlayerState>();
-	if (PS)
+	if (ensure(PS))
 	{
 		PS->LoadPlayerState(CurrentSaveGame);
 	}
+	// Calling Before Super:: so we set variables before 'beginplayingstate' is called in PlayerController (which is where we instantiate UI)
+	//this parent function will occur  "playercontroller->beginplayingstate" ---->UI created
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 }
 
 void ASGameModeBase::StartPlay()
@@ -347,7 +348,6 @@ void ASGameModeBase::OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrap
 
 }
 
-
 // Respawn character
 void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
 {
@@ -371,10 +371,11 @@ void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* Killer)
 
 	// Give credits for killing minion (AI)
 	APawn* KillerPawn = Cast<APawn>(Killer);
-	if (KillerPawn)
+	if (KillerPawn && KillerPawn != VictimActor) //apawn belongs to aactor,can normally be compared
 	{
+		// Only Players will have a 'PlayerState' instance, bots have nullptr
 		ASPlayerState* PS = KillerPawn->GetPlayerState<ASPlayerState>();
-		if (PS) // Can cast and check for nullptr within the if statement
+		if (PS)// Can cast and check for nullptr within the if statement
 		{
 			PS->AddCredits(CreditsPerKill);
 		}

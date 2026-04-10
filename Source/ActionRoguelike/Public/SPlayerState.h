@@ -21,10 +21,23 @@ class ACTIONROGUELIKE_API ASPlayerState : public APlayerState
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(EditDefaultsOnly,Category = "Credits")
+	UPROPERTY(EditDefaultsOnly,ReplicatedUsing = "OnRep_Credits",Category = "Credits")
 	int32 Credits;
+	
+	// OnRep_ can use a parameter containing the 'old value' of the variable it is bound to. Very useful in this case to figure out the 'delta'.
+	
+	//OnRep Function can only at most pass one parameter--->its previous value(name depend on itself)
+	//so if your multicast has only one parameter and it's its old value,then raplace it with OnRep Function
+	UFUNCTION()
+	void OnRep_Credits(int32 OldCredits);
+	
+	// Downside of using multicast here is that we send over more data over the net, since it's an RPC with two parameters. OnRep_ is "free" since Credits is already getting replicated anyway.
+	//UFUNCTION(NetMulticast, Unreliable)
+	//void MulticastCredits(float NewCredits, float Delta);
 
 public:
+	ASPlayerState();
+	
 	UFUNCTION(BlueprintNativeEvent)
 	void SavePlayerState(USSaveGame* SaveObject);
 	

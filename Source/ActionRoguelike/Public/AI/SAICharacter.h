@@ -61,10 +61,13 @@ protected:
 
 	virtual void PostInitializeComponents() override;
 
+	//marked as unreliable,because this on pawn seen actually play a cosmetic role---losing it will not harm your play
+	UFUNCTION(NetMulticast,Unreliable)
+	void MulticastOnPawnSeen(APawn* Pawn);
 	
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
-
+	
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
