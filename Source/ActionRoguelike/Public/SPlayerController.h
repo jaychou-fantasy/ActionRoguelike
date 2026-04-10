@@ -40,6 +40,5 @@ protected:
 	
 	//called when playerstate was replicated to client
 	//to let any comp that needs playerstate to know that::multiplayer was ready to play
-	UFUNCTION()
 	void OnRep_PlayerState() override;
 };
