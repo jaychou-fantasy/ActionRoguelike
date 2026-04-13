@@ -171,6 +171,11 @@ void USActionComponent::ServerStartActionByName_Implementation(AActor* Instigato
 	StartActionByName(Instigator, ActionName);
 }
 
+void USActionComponent::ServerStopActionByName_Implementation(AActor* Instigator, FName ActionName)
+{
+	StopActionByName(Instigator, ActionName);
+}
+
 
 // Here, Channel refers to the replication channel between a UObject subclass on the server and its counterpart on the client.
 // Bunch -> network data packet
@@ -193,12 +198,6 @@ bool USActionComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* B
 // It's fine that the return value isn't used elsewhere because Channel->ReplicateSubobject(Action, *Bunch, *RepFlags) already handles replicating the Action
 // (synchronizing server changes to the client).
 // Client-to-server replication is handled via ServerStartActionByName.
-
-
-void USActionComponent::ServerStopActionByName_Implementation(AActor* Instigator, FName ActionName)
-{
-	StopActionByName(Instigator, ActionName);
-}
 
 
 void USActionComponent::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

@@ -3,10 +3,11 @@
 
 #include "SAction.h"
 #include "SActionComponent.h"
-#include "../ActionRoguelike.h"//ÉÏÒ»¸öÎÄ¼ş¼ĞµÄheaderfile
+#include "../ActionRoguelike.h"
+//    ../means headerfile
 #include "Net/UnrealNetwork.h"
 
-//ÔÚaction±»Newobject<USAction>( , )µÄÊ±ºòµ÷ÓÃ£¬½øĞĞ³õÊ¼»¯
+//ï¿½ï¿½actionï¿½ï¿½Newobject<USAction>( , )ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ğ³ï¿½Ê¼ï¿½ï¿½
 void USAction::Initialize(USActionComponent* NewActionComp)
 {
 	ActionComp = NewActionComp;
@@ -15,7 +16,7 @@ void USAction::Initialize(USActionComponent* NewActionComp)
 bool USAction::CanStart_Implementation(AActor* Instigator)
 {
 	USActionComponent* Comp = GetOwningComponent();
-	if (IsRunning()) // If already running, cannot start ¡ª prevents the same action from being started multiple times simultaneously before the previous one finishes
+	if (IsRunning()) // If already running, cannot start ï¿½ï¿½ prevents the same action from being started multiple times simultaneously before the previous one finishes
 		// Simply add its own tag to BlockedTags; since it's running before the tag is added, it won't affect the current action instance
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Action already running"));
@@ -51,7 +52,7 @@ void USAction::StopAction_Implementation(AActor* Instigator)
 	UE_LOG(LogTemp, Log, TEXT("Stopped: %s"), *GetNameSafe(this));
 	//LogOnScreen(this, FString::Printf(TEXT("Stopped: %s"), *ActionName.ToString()), FColor::White);
 
-	// ensureAlways(bIsRunning); // Since StopAction is only called when ActionComponent has confirmed IsRunning == false, use ensureAlways directly ¡ª no if statement needed (the if is handled in the component)
+	// ensureAlways(bIsRunning); // Since StopAction is only called when ActionComponent has confirmed IsRunning == false, use ensureAlways directly ï¿½ï¿½ no if statement needed (the if is handled in the component)
 
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGameplayTags.RemoveTags(GrantsTags);
