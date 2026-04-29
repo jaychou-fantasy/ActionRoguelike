@@ -30,7 +30,7 @@ public:
 };
 
 
-// Blueprintable indicates that this class can have child classes created in Blueprint ¡ª for example, creating a subclass of BTTaskNode.
+// Blueprintable indicates that this class can have child classes created in Blueprint ï¿½ï¿½ for example, creating a subclass of BTTaskNode.
 // In this case, BTTaskNode itself is marked as Blueprintable.
 
 UCLASS(Blueprintable)
@@ -40,6 +40,9 @@ class ACTIONROGUELIKE_API USAction : public UObject
 	
 
 protected:
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category =  "UI")
+	UTexture2D* Icon;
+	
 	// Components that absolutely need to participate in replication or Blueprint processes must be marked as UPROPERTY
 	UPROPERTY(Replicated)
 	USActionComponent* ActionComp;
@@ -56,6 +59,9 @@ protected:
 	UPROPERTY(ReplicatedUsing = "OnRep_RepData")
 	FActionRepData RepData;
 
+	UPROPERTY(Replicated)
+	float TimeStarted;
+	
 	// Currently, actions from the client can reach the server, but changes to actions on the server cannot propagate to the client
 	UFUNCTION()
 	void OnRep_RepData();
@@ -75,7 +81,7 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "Action")
 	USActionComponent* GetOwningComponent() const;
 
-	// Any function marked as a BlueprintNativeEvent must have a default implementation in C++ ¡ª that is, the _Implementation function
+	// Any function marked as a BlueprintNativeEvent must have a default implementation in C++ ï¿½ï¿½ that is, the _Implementation function
 	UFUNCTION(BlueprintNativeEvent,Category = "Action")
 	void StartAction(AActor* Instigator);
 
@@ -88,7 +94,7 @@ public:
 
 	UWorld* GetWorld() const override;
 
-	// Virtual doesn't need to be written ¡ª when we start overriding, we can just use the override keyword
+	// Virtual doesn't need to be written ï¿½ï¿½ when we start overriding, we can just use the override keyword
 	//
 	// Only UObject requires this; components derived from UActorComponent don't need it (but they do use SetIsReplicatedByDefault)
 	// 

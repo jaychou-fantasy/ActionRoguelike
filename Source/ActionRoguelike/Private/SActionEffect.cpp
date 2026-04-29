@@ -9,6 +9,13 @@ USActionEffect::USActionEffect()
 	bAutoStart = true;
 }
 
+float USActionEffect::GetTimeRemaining() const
+{
+	float EndTime = TimeStarted + Duration;
+	
+	return EndTime - GetWorld()->GetTimeSeconds();
+}
+
 void USActionEffect::StartAction_Implementation(AActor* Instigator)
 {
 	// When calling super in an Implementation, you must also include the _Implementation suffix

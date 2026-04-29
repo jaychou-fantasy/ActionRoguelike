@@ -25,11 +25,11 @@ protected:
 	
 	FTimerHandle PeriodHandle;
 	FTimerHandle DurationHandle;
-
-	UPROPERTY(EditDefaultsOnly,Category = "Effect")
+	//how many times
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "Effect")
 	float Period;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Effect")
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Effect")
 	float Duration;
 
 
@@ -38,4 +38,7 @@ protected:
 
 public:
 	USActionEffect();
+	
+	UFUNCTION(BlueprintCallable,Category = "Effect")
+	float GetTimeRemaining() const;
 };
