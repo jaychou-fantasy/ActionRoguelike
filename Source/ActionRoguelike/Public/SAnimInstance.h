@@ -23,7 +23,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly,Category = "Animation")
 	USActionComponent* ActionComp;
 	
+	//action_start
 	void NativeInitializeAnimation() override;
-
+	//tick
 	void NativeUpdateAnimation(float DeltaSeconds) override;
 };

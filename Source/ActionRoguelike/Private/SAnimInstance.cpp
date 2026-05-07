@@ -19,6 +19,7 @@ void USAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 	static FGameplayTag StunnedTag = FGameplayTag::RequestGameplayTag("Status.Stunned");
+	
 	if (ActionComp)
 	{
 		bIsStunned = ActionComp->ActiveGameplayTags.HasTag(StunnedTag);

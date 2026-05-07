@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnActorLoaded();
 	
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	FText GetInteractText(APawn* InstigatorPawn);
 	
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)//means you can implement it in blueprint as well as c++//but BlueprintImplementableEvent means you can only implement it in blueprint
 	//callable means you can call it in blueprint,otherwise you can only get it but cant call(use)it in blueprint;

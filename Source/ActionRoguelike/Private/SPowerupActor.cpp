@@ -56,6 +56,13 @@ void ASPowerupActor::OnRep_IsActive()
 	RootComponent->SetVisibility(bIsActive, true);
 }
 
+FText ASPowerupActor::GetInteractText_Implementation(APawn* InstigatorPawn)
+{
+	return FText::GetEmpty();
+	//in base class , just return EMPTY message.
+	//implement specific debug message in SUB_class
+}
+
 void ASPowerupActor::Interact_Implementation(APawn* InstigatorPawn)
 {
 	// We'll leave this function for child classes to implement

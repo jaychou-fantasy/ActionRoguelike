@@ -5,6 +5,9 @@
 #include "SAttributeComponent.h"
 #include "SPlayerState.h"
 
+//so we can omit 'NS'LOCTEXT
+#define LOCTEXT_NAMESPACE "InteractableActors"
+
 // Sets default values
 ASPowerup_HealthPotion::ASPowerup_HealthPotion()
 {
@@ -17,7 +20,7 @@ void ASPowerup_HealthPotion::Interact_Implementation(APawn* InstigatorPawn)
 	{
 		return;
 	}
-	//get AttributeComp£¨static funtcion£©
+	//get AttributeCompï¿½ï¿½static funtcionï¿½ï¿½
 	USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(InstigatorPawn);
 			//Cast<USAttributeComponent>(InstigatorPawn->GetComponentByClass(USAttributeComponent::StaticClass()));,// Cast is used because the return type is UAttributeComponent, not USAttributeComponent(no s)
 			//you can do the below directly
@@ -36,5 +39,17 @@ void ASPowerup_HealthPotion::Interact_Implementation(APawn* InstigatorPawn)
 		}
 	}
 }
+FText ASPowerup_HealthPotion::GetInteractText_Implementation(APawn* InstigatorPawn)
+{
+	USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(InstigatorPawn);
+	if (AttributeComp && AttributeComp->IsFullHealth())
+	{
+		//"namespace","column","text you want pass"
+		//NSLOCTEXT("InteractableActors"
+		return LOCTEXT("HealthPotion_FullHealthWarning","Already at full health");
+	}
+	return FText::Format(LOCTEXT("HealthPotion_InteractMessage","Cost {0} credits,restore health to maximum"),CreidtCost);
+}
 
-
+//don't forget to undef
+#undef LOCTEXT_NAMESPACE

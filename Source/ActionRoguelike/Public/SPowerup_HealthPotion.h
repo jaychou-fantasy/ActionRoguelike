@@ -22,6 +22,7 @@ protected:
 	int32 CreidtCost;
 
 public:
+	FText GetInteractText_Implementation(APawn* InstigatorPawn) override;
 	
 	void Interact_Implementation(APawn* InstigatorPawn) override;
 

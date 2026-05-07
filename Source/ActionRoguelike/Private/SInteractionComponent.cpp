@@ -81,7 +81,7 @@ void USInteractionComponent::FindBestInteractable()
 	FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
 
 
-	//clear ref befrore filling it
+	//clear ref before filling it
 	FocusedActor = nullptr;
 
 	for (FHitResult Hit : Hits)
@@ -114,11 +114,13 @@ void USInteractionComponent::FindBestInteractable()
 		//create widget
 		if (DefaultWidgetInstance == nullptr && DefaultWidgetClass)
 		{
+			//owning pawn = getworld()
 			DefaultWidgetInstance = CreateWidget<USWorldUserWidget>(GetWorld(), DefaultWidgetClass);
 		}
 		//attach to minion,  then add to viewport
 		if (DefaultWidgetInstance)
 		{
+			//attached actor = the actor you point at
 			DefaultWidgetInstance->AttachedActor = FocusedActor;
 
 			if (!DefaultWidgetInstance->IsInViewport())
