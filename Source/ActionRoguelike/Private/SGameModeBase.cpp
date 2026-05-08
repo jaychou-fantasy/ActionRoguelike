@@ -10,12 +10,16 @@
 #include "SAttributeComponent.h"
 #include "Curves/CurveFloat.h"
 #include "DrawDebugHelpers.h"
+#include "SActionComponent.h"
 #include "SCharacter.h"
 #include "SGamePlayInterface.h"
 #include "SPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameStateBase.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
+#include "SMonsterData.h"
+#include "../ActionRoguelike.h"
+#include "Engine/AssetManager.h"
 
 
 static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("su.SpawnBots"),true,TEXT("Enable spawning of bots via timer."),ECVF_Cheat);
@@ -188,7 +192,7 @@ void ASGameModeBase::SpawnBotTimeElapsed()
 	// If the console sets it to 0, then just return and don't allow spawning
 	if (!CVarSpawnBots.GetValueOnGameThread())
 	{
-		UE_LOG(LogTemp,Warning,TEXT("Bot spawming disabled via cvar 'CVarSapwnBots'."))
+		//UE_LOG(LogTemp,Warning,TEXT("Bot spawming disabled via cvar 'CVarSapwnBots'."))
 		return;
 	}
 	
@@ -243,15 +247,85 @@ void ASGameModeBase::OnBotSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper*
 	}
 
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
-	UE_LOG(LogTemp, Warning, TEXT("EQS returned %d locations."), Locations.Num());
+	UE_LOG(LogTemp, Log, TEXT("EQS returned %d locations."), Locations.Num());
+	
 	if (Locations.IsValidIndex(0))// .Num() > 0 would also work, since we only need to call one location from the results
 	{
+		/*
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		*/
 
-		GetWorld()->SpawnActor<AActor>(MinionClass, Locations[0], FRotator::ZeroRotator,SpawnParams);
+		if (MonsterTable)
+		{
+			TArray<FMonsterInfoRow*> Rows;
+			MonsterTable->GetAllRows("",Rows);//the first parameter called "Context String",no use(at least so far for me)
+			
+			//get random enemy(this version didn't use weight)
+			int32 RandomIndex = FMath::RandRange(0,Rows.Num()-1);
+			FMonsterInfoRow* SelectedRow = Rows[RandomIndex];
+			
+			 UAssetManager* Manager = UAssetManager::GetIfInitialized();
+			if (Manager)
+			{
+				LogOnScreen(this,"Load Monster...",FColor::Green);
+				
+				TArray<FName> Bundles;//this represent "which detailed part of the content" that should be refered
+				
+				//the next step(CreateUObject) means-----Save("Register") a function to be called in advance
+				FStreamableDelegate Delegate = FStreamableDelegate::CreateUObject(this,&ASGameModeBase::OnMonsterLoaded,SelectedRow->MonsterId,Locations[0]);
+				
+				
+				//asynchronous load
+				//and this delegate is like SetTimer()
+				//So only when "Load" is done,can the delegate's function be called
+				Manager->LoadPrimaryAsset(SelectedRow->MonsterId,Bundles,Delegate);
+			}
+			
+		}
+		// Track all the used spawn locations
+		//DrawDebugSphere(GetWorld(), Locations[0], 50.0f, 20, FColor::Blue, false, 60.0f);
+	}
+}
 
-		DrawDebugSphere(GetWorld(), Locations[0], 50.0f, 20, FColor::Blue, false, 60.0f);
+//the "loaded id" is just a FName,need "asset manager" to use this
+//so you need to get asset manager again
+void ASGameModeBase::OnMonsterLoaded(FPrimaryAssetId LoadedId, FVector SpawnLocation)
+{
+	//this function called means Load is done
+	LogOnScreen(this,"Finished Loading",FColor::Green);
+	
+	UAssetManager* Manager = UAssetManager::GetIfInitialized();
+	if (Manager)
+	{
+		//THE METHOD of GET "DATA ASSET"
+		USMonsterData* MonsterData = Cast<USMonsterData>(Manager->GetPrimaryAssetObject(LoadedId));
+		//
+		
+		if (MonsterData)
+		{
+			//i don't whther this can be omitted
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			
+			AActor* NewBot = GetWorld()->SpawnActor<AActor>(MonsterData->MonsterClass, SpawnLocation, FRotator::ZeroRotator,SpawnParams);
+			//GetWorld()->SpawnActor<AActor>(MinionClass, Locations[0], FRotator::ZeroRotator,SpawnParams);
+			
+			//grant action&buffs(etc.) to New_Monster created
+			if (NewBot)
+			{
+				LogOnScreen(this,FString::Printf(TEXT("Spawn enemy : (%s)"),*GetNameSafe(NewBot),*GetNameSafe(MonsterData)));
+				
+				USActionComponent* ActionComp = Cast<USActionComponent>(NewBot->GetComponentByClass(USActionComponent::StaticClass()));
+				if (ActionComp)
+				{
+					for (TSubclassOf<USAction> ActionClass : MonsterData->Actions)
+					{
+						ActionComp->AddAction(NewBot,ActionClass);
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -270,7 +344,7 @@ void ASGameModeBase::SpawnPowerupTimeElapsed()
 		{
 			UE_LOG(LogTemp, Log, TEXT("EQS Query Started"));
 
-			// When the query finishes, it's a delegate �� once completed, it transmits information. Our new function needs this data, so we use AddDynamic
+			// When the query finishes, it's a delegate -- once completed, it transmits information. Our new function needs this data, so we use AddDynamic
 			QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ASGameModeBase::OnPowerupSpawnQueryCompleted);
 		}
 	}

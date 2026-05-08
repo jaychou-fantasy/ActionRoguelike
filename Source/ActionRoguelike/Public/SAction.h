@@ -41,7 +41,8 @@ class ACTIONROGUELIKE_API USAction : public UObject
 
 protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category =  "UI")
-	UTexture2D* Icon;
+	//UTexture2D* Icon;
+	TSoftObjectPtr<UTexture2D> Icon;
 	
 	// Components that absolutely need to participate in replication or Blueprint processes must be marked as UPROPERTY
 	UPROPERTY(Replicated)

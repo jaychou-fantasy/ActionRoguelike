@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "SSaveGame.h"
+#include "Engine/DataTable.h"
 #include "SGameModeBase.generated.h"
 
 
@@ -14,6 +15,39 @@ class UEnvQueryInstanceBlueprintWrapper;
 class UEnvQuery;
 class UCurveFloat;
 class USSaveGame;
+class UDataTable;
+class USMonsterData;
+
+//DataTable Row for spawning Monsters in game mode
+USTRUCT(BlueprintType)
+struct FMonsterInfoRow : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+public:
+	FMonsterInfoRow()
+	{
+		Weight = 1.0f;
+		SpawnCost = 10.0f;
+		KillReward = 20.0f;
+	}
+	//actually , no need to put "Data Asset" together with "Data Table"
+	// just for study use
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	FPrimaryAssetId MonsterId;
+	//USMonsterData* MonsterData;
+	//TSubclassOf<AActor> MonsterClass;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	float Weight;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	float SpawnCost;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	float KillReward;
+};
+
 
 /**
  * 
@@ -42,6 +76,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UCurveFloat* DifficultyCurve;
 
+	//All available Monster here
+	UPROPERTY(EditDefaultsOnly,Category = "AI")
+	UDataTable* MonsterTable;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	TSubclassOf<AActor> MinionClass;
 	
@@ -77,6 +115,9 @@ protected:
 	void OnBotSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 	// Cannot use "class" to declare this because of the type �� the entire namespace must be included
 
+	UFUNCTION()
+	void OnMonsterLoaded(FPrimaryAssetId LoadedId,FVector SpawnLocation);
+	
 	UFUNCTION()
 	void OnPowerupSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
