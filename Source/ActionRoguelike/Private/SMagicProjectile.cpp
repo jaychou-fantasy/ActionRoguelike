@@ -17,19 +17,21 @@ ASMagicProjectile::ASMagicProjectile()
 	SphereComp->SetSphereRadius(20.0f);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASMagicProjectile::OnActorOverlap);
 	
+	InitialLifeSpan = 10.0f;
+	
 	DamageAmount = 20.0f;
 }
 
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Here, OtherActor and OtherComp are the hit actor and the specific component that was hit
-	// The Instigator set in SpawnParams comes into play here ¡ª GetInstigator() retrieves it
+	// The Instigator set in SpawnParams comes into play here ï¿½ï¿½ GetInstigator() retrieves it
 	// If OtherActor (the actor overlapping with the projectile) is the same as Instigator, then none of the logic below executes, so no damage and no explosion
 	if (OtherActor && OtherActor != GetInstigator())
 	{
 		//FName Muzzle = "Muzzle_01";
 		//static FGameplayTag Tag = FGameplayTag::RequestGameplayTag("Status.Parrying");
-		// This is the difference between requesting a tag and simply requesting a variable ¡ª later requests use the tag, 
+		// This is the difference between requesting a tag and simply requesting a variable ï¿½ï¿½ later requests use the tag, 
 		// and static ensures this request only happens once
 
 
@@ -56,7 +58,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 			}
 		}
 
-		//Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); // "Give me the ID card for this class" ¡ª returns a unique identifier for the class
+		//Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); // "Give me the ID card for this class" ï¿½ï¿½ returns a unique identifier for the class
 		// UE uses this "ID card" at runtime to identify and manipulate types
 		//if (OtherComp)
 		//{

@@ -7,6 +7,10 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 
+//1-the name you see in UEeditor; 2-the real c++ name to be refered; 3-STAT GROUP name
+//that's just a registeration.
+DECLARE_CYCLE_STAT(TEXT("StartActionByName"),STAT_StartActionByName,STATGROUP_STANFORD);
+
 
 USActionComponent::USActionComponent()
 {
@@ -33,6 +37,25 @@ void USActionComponent::BeginPlay()
 	}
 
 }
+
+void USActionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	//Stop All
+	//why do the copy:  because we call "Stop Action"--this triggered "Remove Action" from Actions.
+	//but you can't remove action from Actions while you are iterating it;
+	TArray<USAction*> ActionsCopy = Actions;
+	for (USAction* Action : ActionsCopy)
+	{
+		if (Action && Action->IsRunning())
+		{
+			Action->StopAction(GetOwner());
+		}
+	}
+	
+	//do your job, then "endplay"
+	Super::EndPlay(EndPlayReason);
+}
+
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -113,6 +136,9 @@ USAction* USActionComponent::GetAction(TSubclassOf<USAction> ActionClass) const
 
 bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 {
+	//the real timer of STAT.
+	SCOPE_CYCLE_COUNTER(STAT_StartActionByName);
+	
 	for (USAction* Action : Actions)
 	{
 		if (Action && Action->ActionName == ActionName)
@@ -133,6 +159,7 @@ bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 			{
 				ServerStartActionByName(Instigator, ActionName);
 			}
+			TRACE_BOOKMARK(TEXT("StartActionByName"),*GetNameSafe(Action));
 			Action->StartAction(Instigator);
 			// @fixme: If actions performed on the server cannot replicate to the client,
 			// we need to replicate the actions container and the bIsRunning state.

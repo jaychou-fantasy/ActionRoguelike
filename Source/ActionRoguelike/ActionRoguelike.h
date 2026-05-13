@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 
+//1-the name you see; 2-the c++ name to be refered; 3-the categroy of STAT
+DECLARE_STATS_GROUP(TEXT("STANFORD_Game"),STATGROUP_STANFORD,STATCAT_Advanced);
+
 static void LogOnScreen(UObject* WorldContext, FString Msg, FColor Color = FColor::White, float Duration = 5.0f)
 {
 	if (!ensure(WorldContext))
