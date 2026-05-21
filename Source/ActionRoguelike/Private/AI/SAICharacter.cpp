@@ -24,7 +24,10 @@ ASAICharacter::ASAICharacter()
 	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
 	
 	//disabled on capsule to let projectiles pass through capsule and hit meshcomp instead
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
+	//however this gonna prevent every world_dynamic object to try to overlap with this minion
+	//so we create a "projectile" collision obejct to specificly prevent the collision between "projectile" and "pawn"
+	/*GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);*/
+	
 	//enabled on mesh to react to the incoming projectiles
 	GetMesh()->SetGenerateOverlapEvents(true);
 

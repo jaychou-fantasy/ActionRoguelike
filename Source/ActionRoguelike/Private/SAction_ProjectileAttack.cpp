@@ -9,6 +9,7 @@ USAction_ProjectileAttack::USAction_ProjectileAttack()
 {
 	AttackAnimDelay = 0.2f;
 	HandSocketName = "Muzzle_01";
+	RageCost = 20.0f;
 }
 
 void USAction_ProjectileAttack::StartAction_Implementation(AActor* Instigator)
@@ -60,13 +61,13 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 		//Ignore Player;
 		FCollisionQueryParams Params;
 		Params.AddIgnoredActor(InstigatorCharacter);
-		// Query conditions (filter rules) ¡ª primarily used to specify which objects to ignore during collision detection, whether to use complex collision, whether to return physical materials, etc.
+		// Query conditions (filter rules) ï¿½ï¿½ primarily used to specify which objects to ignore during collision detection, whether to use complex collision, whether to return physical materials, etc.
 		/*
 		Common uses:
 			AddIgnoredActor(): Ignores a specific Actor, excluding it from collision
 			Set bTraceComplex and other toggles
 			Set debug information
-			It does NOT determine which object types participate in the detection ¡ª it only tells the engine "how to query and who to ignore"
+			It does NOT determine which object types participate in the detection ï¿½ï¿½ it only tells the engine "how to query and who to ignore"
 		*/
 
 		FCollisionObjectQueryParams ObjParams;

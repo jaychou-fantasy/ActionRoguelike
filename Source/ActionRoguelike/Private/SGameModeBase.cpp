@@ -43,6 +43,14 @@ void ASGameModeBase::InitGame(const FString& MapName, const FString& Options, FS
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 	
+	//key is "stricmp",but value must care about capital or lower case
+	//the following is to parse a key namd "SaveGame = ..." and pass it to SelectiedSaveSlot->>>SlotName
+	FString SelectedSaveSlot = UGameplayStatics::ParseOption(Options,"SaveGame");
+	if (SelectedSaveSlot.Len() > 0)
+	{
+		SlotName = SelectedSaveSlot;
+	}
+	
 	LoadSaveGame();
 }
 
