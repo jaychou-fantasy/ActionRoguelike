@@ -89,11 +89,7 @@ void USAction_ProjectileAttack::AttackDelay_Elapsed(ACharacter* InstigatorCharac
 			// Adjust location to end up at crosshair look-at
 			// If the crosshair hits something, we can directly spawn the projectile at the impact point
 			TraceEnd = Hit.ImpactPoint;
-			/*
-				Takes your provided XAxis as the local forward direction of the object
-				Automatically calculates a suitable Y and Z axis (ensures an orthonormal basis)
-				Finally generates an FRotationMatrix (rotation matrix)
-			*/
+			
 		}
 		// Fall back since we failed to find any blocking hit
 		ProjRotation = FRotationMatrix::MakeFromX(TraceEnd - HandLocation).Rotator();

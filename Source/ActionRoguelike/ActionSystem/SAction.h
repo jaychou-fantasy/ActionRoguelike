@@ -96,12 +96,11 @@ public:
 	UWorld* GetWorld() const override;
 
 	// Virtual doesn't need to be written �� when we start overriding, we can just use the override keyword
-	//
+	
 	// Only UObject requires this; components derived from UActorComponent don't need it (but they do use SetIsReplicatedByDefault)
-	// 
 	// This function returns false by default (networking disabled)
 	// Changing it to true enables networking
-		bool IsSupportedForNetworking() const override
+	bool IsSupportedForNetworking() const override
 	{
 		return true;
 	}

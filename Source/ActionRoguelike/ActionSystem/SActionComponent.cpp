@@ -162,7 +162,7 @@ bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 			TRACE_BOOKMARK(TEXT("StartActionByName"),*GetNameSafe(Action));
 			Action->StartAction(Instigator);
 			// @fixme: If actions performed on the server cannot replicate to the client,
-			// we need to replicate the actions container and the bIsRunning state.
+			// we need to replicate the "Actions Container" and the "bIsRunning" state.
 			// First replicate the actions, then replicate StartAction.
 
 			return true;

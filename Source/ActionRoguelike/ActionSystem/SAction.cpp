@@ -33,7 +33,6 @@ bool USAction::CanStart_Implementation(AActor* Instigator)
 
 // This implements the basic start and end notifications in UASAction. 
 // The actual start and end logic is called from the component.
-
 void USAction::StartAction_Implementation(AActor* Instigator)
 {
 	UE_LOG(LogTemp, Log, TEXT("Running: %s"), *GetNameSafe(this));
